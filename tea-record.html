@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Eyre 工作台</title>
+    <style>
+        /* ———— 全局重置 & 基础 ———— */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Segoe UI', 'PingFang SC', Roboto, system-ui, -apple-system, sans-serif;
+            background: linear-gradient(145deg, #e3f2e3 0%, #b8d9b8 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ———— 页面容器（启动页 & 主页） ———— */
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.8rem 1.2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.55s ease, visibility 0.55s ease;
+            will-change: opacity, visibility;
+            z-index: 1;
+        }
+
+        .page.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* ———— 启动页 ———— */
+        #startPage .start-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 520px;
+            padding: 1.2rem;
+        }
+
+        .hello-btn {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(255, 255, 255, 0.7);
+            padding: 1.2rem 3.2rem;
+            border-radius: 80px;
+            font-size: clamp(2.6rem, 10vw, 4.8rem);
+            font-weight: 600;
+            color: #1e3a2a;
+            letter-spacing: 0.04em;
+            box-shadow: 0 20px 40px -12px rgba(30, 60, 40, 0.25),
+                inset 0 1px 2px rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.3s ease, background 0.3s ease;
+            user-select: none;
+            line-height: 1.3;
+            min-width: 200px;
+        }
+
+        .hello-btn:hover {
+            transform: scale(1.03) translateY(-2px);
+            box-shadow: 0 28px 48px -14px rgba(30, 60, 40, 0.35);
+            background: rgba(255, 255, 255, 0.65);
+        }
+
+        .hello-btn:active {
+            transform: scale(0.96);
+            transition-duration: 0.08s;
+        }
+
+        .start-slogan {
+            margin-top: 2.2rem;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            color: #1f4a2d;
+            font-weight: 400;
+            letter-spacing: 0.06em;
+            opacity: 0.9;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: floatSlogan 4s ease-in-out infinite;
+            line-height: 1.5;
+        }
+
+        @keyframes floatSlogan {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        /* ———— 工作台主页 ———— */
+        #mainPage {
+            align-items: flex-start;
+            padding-top: 2.2rem;
+            padding-bottom: 2.8rem;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 680px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem;
+        }
+
+        /* --- 顶部栏：返回 + 日期时间 --- */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 0.6rem 1rem;
+            padding: 0.2rem 0.2rem 0.4rem 0.2rem;
+        }
+
+        .back-link {
+            font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+            color: #1f4a2d;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            padding: 0.5rem 1.2rem 0.5rem 0.9rem;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            font-weight: 500;
+            transition: background 0.25s, transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2rem;
+            box-shadow: 0 2px 8px rgba(0, 30, 0, 0.06);
+            white-space: nowrap;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.55);
+            transform: translateX(-2px);
+        }
+
+        .back-link:active {
+            transform: scale(0.94);
+        }
+
+        .datetime-group {
+            text-align: right;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 0.6rem 1.4rem 0.7rem 1.4rem;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 2px 12px rgba(0, 30, 0, 0.06);
+            min-width: 140px;
+        }
+
+        .date-display {
+            font-size: clamp(0.85rem, 2.2vw, 1.1rem);
+            color: #1e3a2a;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            opacity: 0.85;
+            line-height: 1.4;
+        }
+
+        .time-display {
+            font-size: clamp(2rem, 6.5vw, 3.2rem);
+            font-weight: 600;
+            color: #163623;
+            letter-spacing: 0.06em;
+            font-variant-numeric: tabular-nums;
+            line-height: 1.2;
+            margin-top: 0.1rem;
+        }
+
+        .greeting-display {
+            font-size: clamp(1rem, 2.8vw, 1.45rem);
+            font-weight: 500;
+            color: #1f4a2d;
+            letter-spacing: 0.04em;
+            opacity: 0.9;
+            margin-top: 0.1rem;
+        }
+
+        /* 分割线 + 天数行 */
+        .day-divider {
+            border-top: 1px solid rgba(30, 60, 40, 0.12);
+            margin: 0.4rem 0 0.3rem 0;
+            width: 100%;
+        }
+
+        .day-count {
+            font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+            color: rgba(30, 60, 40, 0.5);
+            letter-spacing: 0.03em;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.3rem;
+            margin-top: 0.1rem;
+        }
+
+        .day-icon {
+            font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+        }
+
+        .day-number {
+            color: #2e7d32;
+            font-weight: 700;
+            font-size: clamp(0.75rem, 1.7vw, 0.95rem);
+        }
+
+        /* --- 三个卡片 --- */
+        .cards-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1.2rem;
+            margin-top: 0.2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 1.6rem 1rem 1.8rem 1rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 24px rgba(0, 30, 0, 0.08);
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
+            cursor: default;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 36px rgba(0, 30, 0, 0.12);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .card-emoji {
+            font-size: clamp(2.6rem, 6vw, 3.6rem);
+            line-height: 1.2;
+            margin-bottom: 0.3rem;
+        }
+
+        .card-title {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            font-weight: 600;
+            color: #1b3a22;
+            letter-spacing: 0.03em;
+        }
+
+        .card-desc {
+            font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+            color: #2d5a3d;
+            opacity: 0.7;
+            margin-top: 0.2rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+
+        /* --- 奶茶记录卡片 (点击进入) --- */
+        #drinkCard {
+            cursor: pointer;
+        }
+        #drinkCard:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 36px rgba(0, 30, 0, 0.12);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* --- 今日心情区域 --- */
+        .mood-section {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 1.6rem 1.6rem 1.8rem 1.6rem;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 24px rgba(0, 30, 0, 0.07);
+            margin-top: 0.2rem;
+            transition: box-shadow 0.3s;
+        }
+
+        .mood-section:hover {
+            box-shadow: 0 12px 32px rgba(0, 30, 0, 0.10);
+        }
+
+        .mood-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .mood-header h3 {
+            font-size: clamp(1.1rem, 2.8vw, 1.5rem);
+            font-weight: 600;
+            color: #1b3a22;
+            letter-spacing: 0.04em;
+        }
+
+        .mood-header span {
+            font-size: 1.2rem;
+        }
+
+        .mood-input-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            align-items: center;
+        }
+
+        .mood-input-row input {
+            flex: 1 1 180px;
+            padding: 0.7rem 1.2rem;
+            border-radius: 60px;
+            border: 1.5px solid rgba(60, 120, 80, 0.2);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+            color: #1b3a22;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+            font-family: inherit;
+            min-height: 48px;
+        }
+
+        .mood-input-row input::placeholder {
+            color: #5a7a6a;
+            opacity: 0.6;
+            font-weight: 300;
+        }
+
+        .mood-input-row input:focus {
+            border-color: #4c8b5a;
+            box-shadow: 0 0 0 4px rgba(60, 140, 80, 0.15);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .mood-input-row button {
+            padding: 0.7rem 1.8rem;
+            border-radius: 60px;
+            border: none;
+            background: rgba(60, 130, 80, 0.75);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            color: #fff;
+            font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+            box-shadow: 0 4px 12px rgba(40, 100, 60, 0.2);
+            font-family: inherit;
+            min-height: 48px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.04em;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            white-space: nowrap;
+        }
+
+        .mood-input-row button:hover {
+            background: rgba(50, 140, 80, 0.9);
+            transform: scale(1.02);
+            box-shadow: 0 6px 18px rgba(40, 100, 60, 0.3);
+        }
+
+        .mood-input-row button:active {
+            transform: scale(0.94);
+            transition-duration: 0.08s;
+        }
+
+        .mood-display {
+            margin-top: 1.2rem;
+            padding: 0.8rem 1.4rem;
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            font-size: clamp(1rem, 2.6vw, 1.3rem);
+            color: #1b3a22;
+            min-height: 3.4rem;
+            border: 1px dashed rgba(60, 120, 80, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+
+        .mood-display.has-mood {
+            border: 1px solid rgba(60, 140, 80, 0.3);
+            background: rgba(255, 255, 255, 0.55);
+        }
+
+        .mood-display .mood-emoji {
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .mood-display .mood-text {
+            font-weight: 450;
+        }
+
+        .mood-display .empty-hint {
+            color: #5a7a6a;
+            opacity: 0.5;
+            font-weight: 300;
+        }
+
+        /* ———— 奶茶记录页面 ———— */
+        #drinkPage {
+            align-items: flex-start;
+            padding-top: 1.8rem;
+            padding-bottom: 2.8rem;
+        }
+        .drink-container {
+            width: 100%;
+            max-width: 680px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .drink-top-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0 0.2rem;
+        }
+        .drink-back {
+            flex-shrink: 0;
+        }
+        .drink-title {
+            font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+            font-weight: 600;
+            color: #1e3a2a;
+            letter-spacing: 0.04em;
+        }
+
+        /* 分类标签 */
+        .category-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 0.5rem 0.8rem;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .category-tab {
+            flex: 1;
+            min-width: 60px;
+            padding: 0.5rem 0.8rem;
+            border: none;
+            border-radius: 30px;
+            background: transparent;
+            font-size: clamp(0.85rem, 2vw, 1.05rem);
+            font-weight: 500;
+            color: #1e3a2a;
+            opacity: 0.6;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+        .category-tab:hover {
+            opacity: 0.85;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .category-tab.active {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            box-shadow: 0 2px 8px rgba(0, 30, 0, 0.06);
+        }
+
+        /* 记录列表 */
+        .drink-list {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 1.2rem 1.2rem 0.8rem 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            min-height: 120px;
+            max-height: 320px;
+            overflow-y: auto;
+            box-shadow: 0 4px 16px rgba(0, 30, 0, 0.05);
+        }
+        .drink-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .drink-list::-webkit-scrollbar-thumb {
+            background: rgba(60, 120, 80, 0.25);
+            border-radius: 10px;
+        }
+        .drink-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .drink-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 0.4rem;
+            border-bottom: 1px solid rgba(60, 120, 80, 0.08);
+            font-size: clamp(0.9rem, 2.2vw, 1.05rem);
+            color: #1b3a22;
+        }
+        .drink-item:last-child {
+            border-bottom: none;
+        }
+        .drink-item .drink-name {
+            font-weight: 500;
+            flex: 1;
+        }
+        .drink-item .drink-stars {
+            color: #f5b342;
+            font-size: clamp(0.8rem, 1.8vw, 1rem);
+            letter-spacing: 1px;
+            margin-left: 0.6rem;
+            flex-shrink: 0;
+        }
+        .drink-item .drink-time {
+            font-size: clamp(0.6rem, 1.4vw, 0.75rem);
+            color: rgba(30, 60, 40, 0.4);
+            margin-left: 0.8rem;
+            flex-shrink: 0;
+        }
+        .drink-empty {
+            text-align: center;
+            color: rgba(30, 60, 40, 0.35);
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
+            padding: 1.8rem 0;
+            font-weight: 300;
+        }
+
+        /* 添加表单 */
+        .drink-form {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 1.2rem 1.4rem 1.4rem 1.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 16px rgba(0, 30, 0, 0.05);
+        }
+        .drink-form-title {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            font-weight: 500;
+            color: #1b3a22;
+            margin-bottom: 0.8rem;
+            opacity: 0.7;
+        }
+        .drink-form input[type="text"] {
+            width: 100%;
+            padding: 0.7rem 1.2rem;
+            border-radius: 60px;
+            border: 1.5px solid rgba(60, 120, 80, 0.15);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+            color: #1b3a22;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: inherit;
+            margin-bottom: 0.7rem;
+        }
+        .drink-form input[type="text"]::placeholder {
+            color: #5a7a6a;
+            opacity: 0.5;
+            font-weight: 300;
+        }
+        .drink-form input[type="text"]:focus {
+            border-color: #4c8b5a;
+            box-shadow: 0 0 0 4px rgba(60, 140, 80, 0.1);
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .drink-form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+        .drink-form-row select {
+            flex: 1 1 120px;
+            padding: 0.6rem 1rem;
+            border-radius: 60px;
+            border: 1.5px solid rgba(60, 120, 80, 0.15);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            color: #1b3a22;
+            outline: none;
+            font-family: inherit;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        .drink-form-row select:focus {
+            border-color: #4c8b5a;
+        }
+        .drink-form-row .star-rating {
+            display: flex;
+            gap: 0.15rem;
+            align-items: center;
+        }
+        .drink-form-row .star-rating .star {
+            font-size: clamp(1.4rem, 3.5vw, 2rem);
+            color: #d0d0d0;
+            cursor: pointer;
+            transition: color 0.15s, transform 0.15s;
+            user-select: none;
+            line-height: 1;
+        }
+        .drink-form-row .star-rating .star.active {
+            color: #f5b342;
+        }
+        .drink-form-row .star-rating .star:hover {
+            transform: scale(1.15);
+        }
+        .drink-form-row .star-rating .star.active:hover {
+            transform: scale(1.15);
+        }
+        .drink-form button {
+            width: 100%;
+            padding: 0.7rem 0;
+            border-radius: 60px;
+            border: none;
+            background: rgba(60, 130, 80, 0.75);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            color: #fff;
+            font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+            box-shadow: 0 4px 12px rgba(40, 100, 60, 0.15);
+            font-family: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            letter-spacing: 0.04em;
+        }
+        .drink-form button:hover {
+            background: rgba(50, 140, 80, 0.9);
+            transform: scale(1.01);
+            box-shadow: 0 6px 18px rgba(40, 100, 60, 0.25);
+        }
+        .drink-form button:active {
+            transform: scale(0.96);
+            transition-duration: 0.08s;
+        }
+
+        /* ———— 响应式微调 ———— */
+        @media (max-width: 500px) {
+            .page {
+                padding: 1rem 0.8rem;
+            }
+            #mainPage {
+                padding-top: 1.2rem;
+                padding-bottom: 1.8rem;
+            }
+            #drinkPage {
+                padding-top: 1rem;
+                padding-bottom: 1.8rem;
+            }
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.8rem;
+            }
+            .back-link {
+                align-self: flex-start;
+            }
+            .datetime-group {
+                text-align: center;
+                width: 100%;
+                padding: 0.6rem 0.8rem;
+            }
+            .cards-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.8rem;
+            }
+            .card {
+                min-height: 120px;
+                padding: 1.2rem 0.6rem;
+            }
+            .mood-section {
+                padding: 1.2rem 1rem 1.4rem 1rem;
+            }
+            .mood-input-row input {
+                flex: 1 1 100%;
+                min-height: 44px;
+            }
+            .mood-input-row button {
+                flex: 1 1 100%;
+                min-height: 44px;
+            }
+            .mood-display {
+                min-height: 2.8rem;
+                padding: 0.6rem 1rem;
+            }
+            .drink-top-bar {
+                flex-wrap: wrap;
+            }
+            .drink-form-row select {
+                flex: 1 1 100%;
+            }
+            .drink-form-row .star-rating {
+                justify-content: center;
+                flex: 1 1 100%;
+            }
+            .drink-list {
+                max-height: 240px;
+                padding: 1rem 1rem 0.6rem 1rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .cards-row {
+                grid-template-columns: 1fr;
+                gap: 0.7rem;
+            }
+            .card {
+                min-height: 100px;
+                flex-direction: row;
+                gap: 0.8rem;
+                padding: 0.8rem 1rem;
+                justify-content: flex-start;
+                text-align: left;
+            }
+            .card-emoji {
+                font-size: 2.2rem;
+                margin-bottom: 0;
+                flex-shrink: 0;
+            }
+            .card-title {
+                font-size: 1rem;
+            }
+            .card-desc {
+                font-size: 0.75rem;
+            }
+            .card-text-group {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* ———— 工具类 ———— */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== 启动页 ===== -->
+    <div id="startPage" class="page active">
+        <div class="start-content">
+            <button class="hello-btn" id="helloBtn">Hello Eyre</button>
+            <div class="start-slogan">✨ 公主今天也要认真经营人生主线游戏！</div>
+        </div>
+    </div>
+
+    <!-- ===== 工作台主页 ===== -->
+    <div id="mainPage" class="page">
+        <div class="main-container">
+
+            <!-- 顶部：返回 + 日期时间 -->
+            <div class="top-bar">
+                <a class="back-link" id="backBtn">← 返回启动页</a>
+                <div class="datetime-group">
+                    <div class="date-display" id="dateDisplay">----年--月--日</div>
+                    <div class="time-display" id="timeDisplay">00:00:00</div>
+                    <div class="greeting-display" id="greetingDisplay">☀️ 下午好</div>
+                    <div class="day-divider"></div>
+                    <div class="day-count">
+                        <span class="day-icon">📅</span>
+                        这是你使用工作台的第 <span class="day-number" id="dayNumber">1</span> 天
+                    </div>
+                </div>
+            </div>
+
+            <!-- 三个卡片 + 奶茶记录 -->
+            <div class="cards-row">
+                <div class="card">
+                    <div class="card-emoji">📔</div>
+                    <div class="card-text-group">
+                        <div class="card-title">日记</div>
+                        <div class="card-desc">记录今日所思所想</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-emoji">📚</div>
+                    <div class="card-text-group">
+                        <div class="card-title">读书</div>
+                        <div class="card-desc">沉浸文字的世界</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-emoji">📊</div>
+                    <div class="card-text-group">
+                        <div class="card-title">商情简报</div>
+                        <div class="card-desc">洞察市场动向</div>
+                    </div>
+                </div>
+                <!-- 👇 新增：奶茶记录卡片 -->
+                <div class="card" id="drinkCard">
+                    <div class="card-emoji">🧋</div>
+                    <div class="card-text-group">
+                        <div class="card-title">奶茶记录</div>
+                        <div class="card-desc">记录今日的快乐水</div>
+                    </div>
+                </div>
+                <!-- 👆 新增 -->
+            </div>
+
+            <!-- 今日心情 -->
+            <div class="mood-section">
+                <div class="mood-header">
+                    <span>💭</span>
+                    <h3>今日心情</h3>
+                </div>
+                <div class="mood-input-row">
+                    <input type="text" id="moodInput" placeholder="今天感觉怎么样？" maxlength="200" autocomplete="off" />
+                    <button id="moodSaveBtn">保存</button>
+                </div>
+                <div class="mood-display" id="moodDisplay">
+                    <span class="empty-hint">还没有记录，写点什么吧 ✍️</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== 奶茶记录页 ===== -->
+    <div id="drinkPage" class="page">
+        <div class="drink-container">
+            <!-- 顶部导航 -->
+            <div class="drink-top-bar">
+                <a class="back-link drink-back" id="drinkBackBtn">← 返回工作台</a>
+                <span class="drink-title">🧋 奶茶记录</span>
+            </div>
+
+            <!-- 分类标签 -->
+            <div class="category-tabs" id="categoryTabs">
+                <button class="category-tab active" data-category="奶茶">奶茶</button>
+                <button class="category-tab" data-category="饮料">饮料</button>
+                <button class="category-tab" data-category="咖啡">咖啡</button>
+                <button class="category-tab" data-category="酒类">酒类</button>
+            </div>
+
+            <!-- 记录列表 -->
+            <div class="drink-list" id="drinkList">
+                <div class="drink-empty">🍃 还没有记录，写点什么吧</div>
+            </div>
+
+            <!-- 添加表单 -->
+            <div class="drink-form">
+                <div class="drink-form-title">📝 添加记录</div>
+                <input type="text" id="drinkInput" placeholder="今天有没有喝什么？" maxlength="100" />
+                <div class="drink-form-row">
+                    <select id="drinkCategorySelect">
+                        <option value="奶茶">奶茶</option>
+                        <option value="饮料">饮料</option>
+                        <option value="咖啡">咖啡</option>
+                        <option value="酒类">酒类</option>
+                    </select>
+                    <div class="star-rating" id="starRating">
+                        <span class="star" data-value="1">☆</span>
+                        <span class="star" data-value="2">☆</span>
+                        <span class="star" data-value="3">☆</span>
+                        <span class="star" data-value="4">☆</span>
+                        <span class="star" data-value="5">☆</span>
+                    </div>
+                </div>
+                <button id="drinkSaveBtn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            "use strict";
+
+            // ———— DOM 引用 ————
+            const startPage = document.getElementById('startPage');
+            const mainPage = document.getElementById('mainPage');
+            const drinkPage = document.getElementById('drinkPage');
+            const helloBtn = document.getElementById('helloBtn');
+            const backBtn = document.getElementById('backBtn');
+            const drinkBackBtn = document.getElementById('drinkBackBtn');
+            const drinkCard = document.getElementById('drinkCard');
+
+            const dateDisplay = document.getElementById('dateDisplay');
+            const timeDisplay = document.getElementById('timeDisplay');
+            const greetingDisplay = document.getElementById('greetingDisplay');
+            const dayNumberEl = document.getElementById('dayNumber');
+
+            const moodInput = document.getElementById('moodInput');
+            const moodSaveBtn = document.getElementById('moodSaveBtn');
+            const moodDisplay = document.getElementById('moodDisplay');
+
+            // ———— 页面切换 ————
+            function showPage(pageId) {
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                const target = document.getElementById(pageId);
+                if (target) target.classList.add('active');
+                // 如果切换到奶茶记录页，刷新列表
+                if (pageId === 'drinkPage') {
+                    renderDrinkList(currentCategory);
+                }
+            }
+
+            // 重写 showPage 以便在 drinkPage 激活时渲染
+            const originalShowPage = showPage;
+            showPage = function(pageId) {
+                originalShowPage(pageId);
+            };
+
+            helloBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('mainPage');
+                updateClockAndGreeting();
+                loadMood();
+                setTimeout(() => moodInput.focus(), 300);
+            });
+
+            backBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('startPage');
+            });
+
+            drinkBackBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('mainPage');
+            });
+
+            drinkCard.addEventListener('click', function() {
+                showPage('drinkPage');
+            });
+
+            // ———— 工具函数 ————
+            function pad(n) {
+                return String(n).padStart(2, '0');
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // ———— 计算使用天数 (从2026年8月3日算第1天) ————
+            function updateDayCount() {
+                const today = new Date();
+                const baseDate = new Date(2026, 7, 3);
+                const diffMs = today - baseDate;
+                const diffDays = Math.floor(diffMs / (24 * 60 * 60 * 1000)) + 1;
+                const days = diffDays < 0 ? 0 : diffDays;
+                if (dayNumberEl) {
+                    dayNumberEl.textContent = days;
+                }
+            }
+
+            // ———— 时钟 & 问候语 ————
+            function updateClockAndGreeting() {
+                const now = new Date();
+                const h = now.getHours();
+                const m = now.getMinutes();
+                const s = now.getSeconds();
+
+                timeDisplay.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
+
+                const year = now.getFullYear();
+                const month = pad(now.getMonth() + 1);
+                const day = pad(now.getDate());
+                const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+                const weekday = weekdays[now.getDay()];
+                dateDisplay.textContent = year + '年 ' + month + '月 ' + day + '日  ' + weekday;
+
+                let greeting = '';
+                let emoji = '';
+                if (h >= 6 && h < 12) {
+                    greeting = '早安';
+                    emoji = '🌅';
+                } else if (h >= 12 && h < 18) {
+                    greeting = '下午好';
+                    emoji = '☀️';
+                } else {
+                    greeting = '晚安';
+                    emoji = '🌙';
+                }
+                greetingDisplay.textContent = emoji + ' ' + greeting;
+
+                updateDayCount();
+            }
+
+            updateClockAndGreeting();
+            setInterval(updateClockAndGreeting, 1000);
+
+            // ———— 今日心情 (localStorage) ————
+            const MOOD_KEY = 'eyre_workbench_mood';
+
+            function loadMood() {
+                const saved = localStorage.getItem(MOOD_KEY);
+                if (saved && saved.trim() !== '') {
+                    const displayText = saved.trim();
+                    moodDisplay.innerHTML =
+                        '<span class="mood-emoji">🌸</span><span class="mood-text">' +
+                        escapeHtml(displayText) +
+                        '</span>';
+                    moodDisplay.classList.add('has-mood');
+                } else {
+                    moodDisplay.innerHTML = '<span class="empty-hint">还没有记录，写点什么吧 ✍️</span>';
+                    moodDisplay.classList.remove('has-mood');
+                }
+            }
+
+            function saveMood(text) {
+                const trimmed = text.trim();
+                if (trimmed === '') {
+                    localStorage.removeItem(MOOD_KEY);
+                    loadMood();
+                    return;
+                }
+                localStorage.setItem(MOOD_KEY, trimmed);
+                loadMood();
+            }
+
+            moodSaveBtn.addEventListener('click', function() {
+                const val = moodInput.value;
+                saveMood(val);
+                moodInput.value = '';
+                setTimeout(() => moodInput.focus(), 100);
+            });
+
+            moodInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    moodSaveBtn.click();
+                }
+            });
+
+            // ———— 奶茶记录 (localStorage) ————
+            const DRINK_KEY = 'eyre_drink_records';
+
+            function getDefaultDrinks() {
+                return { records: [] };
+            }
+
+            function loadDrinkRecords() {
+                try {
+                    const data = localStorage.getItem(DRINK_KEY);
+                    if (data) {
+                        const parsed = JSON.parse(data);
+                        if (parsed && typeof parsed === 'object' && Array.isArray(parsed.records)) {
+                            return parsed;
+                        }
+                    }
+                } catch (e) {}
+                return getDefaultDrinks();
+            }
+
+            function saveDrinkRecords(data) {
+                localStorage.setItem(DRINK_KEY, JSON.stringify(data));
+            }
+
+            let currentCategory = '奶茶';
+            let selectedRating = 0;
+
+            const categoryTabs = document.getElementById('categoryTabs');
+            const drinkList = document.getElementById('drinkList');
+            const drinkInput = document.getElementById('drinkInput');
+            const drinkCategorySelect = document.getElementById('drinkCategorySelect');
+            const starRating = document.getElementById('starRating');
+            const drinkSaveBtn = document.getElementById('drinkSaveBtn');
+
+            // 分类切换
+            categoryTabs.addEventListener('click', function(e) {
+                const tab = e.target.closest('.category-tab');
+                if (!tab) return;
+                categoryTabs.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentCategory = tab.dataset.category;
+                renderDrinkList(currentCategory);
+            });
+
+            // 渲染记录列表
+            function renderDrinkList(category) {
+                const data = loadDrinkRecords();
+                const filtered = data.records.filter(r => r.category === category);
+                filtered.sort((a, b) => b.id - a.id);
+
+                if (filtered.length === 0) {
+                    drinkList.innerHTML = `<div class="drink-empty">🍃 还没有记录，写点什么吧</div>`;
+                    return;
+                }
+
+                let html = '';
+                filtered.forEach(r => {
+                    const stars = '⭐'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+                    const timeStr = r.date || '';
+                    html += `
+                        <div class="drink-item">
+                            <span class="drink-name">${escapeHtml(r.name)}</span>
+                            <span class="drink-stars">${stars}</span>
+                            <span class="drink-time">${timeStr}</span>
+                        </div>
+                    `;
+                });
+                drinkList.innerHTML = html;
+            }
+
+            // 星级选择
+            starRating.addEventListener('click', function(e) {
+                const star = e.target.closest('.star');
+                if (!star) return;
+                const value = parseInt(star.dataset.value, 10);
+                selectedRating = value;
+                starRating.querySelectorAll('.star').forEach(s => {
+                    const v = parseInt(s.dataset.value, 10);
+                    s.classList.toggle('active', v <= value);
+                });
+            });
+
+            // 保存记录
+            drinkSaveBtn.addEventListener('click', function() {
+                const name = drinkInput.value.trim();
+                if (!name) {
+                    alert('请输入饮品名称 ✍️');
+                    drinkInput.focus();
+                    return;
+                }
+                if (selectedRating === 0) {
+                    alert('请选择喜好程度 ⭐');
+                    return;
+                }
+                const category = drinkCategorySelect.value;
+
+                const data = loadDrinkRecords();
+                const now = new Date();
+                const dateStr =
+                    now.getFullYear() + '-' +
+                    String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(now.getDate()).padStart(2, '0');
+
+                data.records.push({
+                    id: Date.now(),
+                    name: name,
+                    category: category,
+                    rating: selectedRating,
+                    date: dateStr
+                });
+
+                saveDrinkRecords(data);
+                renderDrinkList(currentCategory);
+
+                drinkInput.value = '';
+                selectedRating = 0;
+                starRating.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+                drinkInput.focus();
+            });
+
+            drinkInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    drinkSaveBtn.click();
+                }
+            });
+
+            // ———— 初始化 ————
+            loadMood();
+
+            // 确保启动页可见
+            document.addEventListener('DOMContentLoaded', function() {
+                if (mainPage.classList.contains('active')) {
+                    loadMood();
+                }
+                if (!startPage.classList.contains('active') && !mainPage.classList.contains('active') && !drinkPage
+                    .classList.contains('active')) {
+                    startPage.classList.add('active');
+                }
+                // 初始化奶茶记录页的分类高亮
+                const firstTab = categoryTabs.querySelector('.category-tab');
+                if (firstTab) {
+                    categoryTabs.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                    firstTab.classList.add('active');
+                    currentCategory = firstTab.dataset.category;
+                }
+                if (drinkPage.classList.contains('active')) {
+                    renderDrinkList(currentCategory);
+                }
+            });
+
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    updateClockAndGreeting();
+                }
+            });
+
+            console.log('✨ Eyre 工作台已加载 ✨');
+        })();
+    </script>
+</body>
+</html>
