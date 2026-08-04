@@ -210,6 +210,34 @@
             margin-top: 0.1rem;
         }
 
+        /* --- 分割线 + 天数行 (新增) --- */
+        .day-divider {
+            border-top: 1px solid rgba(30, 60, 40, 0.12);
+            margin: 0.4rem 0 0.3rem 0;
+            width: 100%;
+        }
+
+        .day-count {
+            font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+            color: rgba(30, 60, 40, 0.5);
+            letter-spacing: 0.03em;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.3rem;
+            margin-top: 0.1rem;
+        }
+
+        .day-icon {
+            font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+        }
+
+        .day-number {
+            color: #2e7d32;
+            font-weight: 700;
+            font-size: clamp(0.75rem, 1.7vw, 0.95rem);
+        }
+
         /* --- 三个卡片 --- */
         .cards-row {
             display: grid;
@@ -510,12 +538,13 @@
                     <div class="date-display" id="dateDisplay">----年--月--日</div>
                     <div class="time-display" id="timeDisplay">00:00:00</div>
                     <div class="greeting-display" id="greetingDisplay">☀️ 下午好</div>
-                    <!-- 在 greeting-display 后面添加 -->
+                    <!-- 👇 新增：分割线 + 使用天数 -->
                     <div class="day-divider"></div>
                     <div class="day-count">
                         <span class="day-icon">📅</span>
                         这是你使用工作台的第 <span class="day-number" id="dayNumber">1</span> 天
                     </div>
+                    <!-- 👆 新增 -->
                 </div>
             </div>
 
@@ -575,6 +604,7 @@
             const dateDisplay = document.getElementById('dateDisplay');
             const timeDisplay = document.getElementById('timeDisplay');
             const greetingDisplay = document.getElementById('greetingDisplay');
+            const dayNumberEl = document.getElementById('dayNumber');
 
             const moodInput = document.getElementById('moodInput');
             const moodSaveBtn = document.getElementById('moodSaveBtn');
@@ -589,10 +619,8 @@
             helloBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 showPage('mainPage');
-                // 进入主页后立即刷新时间 & 心情
                 updateClockAndGreeting();
                 loadMood();
-                // 输入框自动获得焦点（移动端友好）
                 setTimeout(() => moodInput.focus(), 300);
             });
 
@@ -601,21 +629,32 @@
                 showPage('startPage');
             });
 
-            // ———— 时钟 & 问候语 ————
+            // ———— 工具函数 ————
             function pad(n) {
                 return String(n).padStart(2, '0');
             }
 
+            // ———— 计算使用天数 (从2026年8月3日算第1天) ————
+            function updateDayCount() {
+                const today = new Date();
+                const baseDate = new Date(2026, 7, 3); // 2026-08-03
+                const diffMs = today - baseDate;
+                const diffDays = Math.floor(diffMs / (24 * 60 * 60 * 1000)) + 1;
+                const days = diffDays < 0 ? 0 : diffDays;
+                if (dayNumberEl) {
+                    dayNumberEl.textContent = days;
+                }
+            }
+
+            // ———— 时钟 & 问候语 ————
             function updateClockAndGreeting() {
                 const now = new Date();
                 const h = now.getHours();
                 const m = now.getMinutes();
                 const s = now.getSeconds();
 
-                // 时间
                 timeDisplay.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
 
-                // 日期 + 星期
                 const year = now.getFullYear();
                 const month = pad(now.getMonth() + 1);
                 const day = pad(now.getDate());
@@ -623,7 +662,6 @@
                 const weekday = weekdays[now.getDay()];
                 dateDisplay.textContent = year + '年 ' + month + '月 ' + day + '日  ' + weekday;
 
-                // 问候语
                 let greeting = '';
                 let emoji = '';
                 if (h >= 6 && h < 12) {
@@ -637,9 +675,12 @@
                     emoji = '🌙';
                 }
                 greetingDisplay.textContent = emoji + ' ' + greeting;
+
+                // 更新天数
+                updateDayCount();
             }
 
-            // 立即执行一次，然后每秒更新
+            // 立即执行，然后每秒更新
             updateClockAndGreeting();
             setInterval(updateClockAndGreeting, 1000);
 
@@ -661,7 +702,6 @@
                 }
             }
 
-            // 简单的防 XSS (转义)
             function escapeHtml(text) {
                 const div = document.createElement('div');
                 div.textContent = text;
@@ -671,7 +711,6 @@
             function saveMood(text) {
                 const trimmed = text.trim();
                 if (trimmed === '') {
-                    // 如果输入为空，视为清除心情
                     localStorage.removeItem(MOOD_KEY);
                     loadMood();
                     return;
@@ -683,12 +722,10 @@
             moodSaveBtn.addEventListener('click', function() {
                 const val = moodInput.value;
                 saveMood(val);
-                moodInput.value = ''; // 清空输入框
-                // 保存后让输入框继续保持焦点
+                moodInput.value = '';
                 setTimeout(() => moodInput.focus(), 100);
             });
 
-            // 回车保存
             moodInput.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
@@ -696,39 +733,23 @@
                 }
             });
 
-            // 页面加载时加载心情 (如果主页是初始显示，但默认启动页可见，所以主页加载时调用)
-            // 但为了保险，在切换到主页时也会调用 loadMood
-            // 同时，如果用户直接刷新页面时停留在主页（但我们的设计默认启动页），
-            // 但以防万一，在页面加载时也加载一次
+            // 页面加载时加载心情
             loadMood();
 
-            // 额外：在显示主页时重新加载心情（但showPage里已经调用了）
-            // 但为了确保，在点击helloBtn时调用了loadMood
-
-            // 如果用户直接访问页面且主页处于激活状态（极少情况，因为默认启动页active），
-            // 但为了健壮，在DOM加载完成后检查一下
             document.addEventListener('DOMContentLoaded', function() {
-                // 如果主页是激活状态（比如通过某些方式直接显示），加载心情
                 if (mainPage.classList.contains('active')) {
                     loadMood();
                 }
-                // 确保启动页是可见的（默认应该是）
-                // 但如果有意外，保证启动页可见
                 if (!startPage.classList.contains('active') && !mainPage.classList.contains('active')) {
                     startPage.classList.add('active');
                 }
             });
 
-            // 也监听页面可见性变化，切回页面时刷新时间（但setInterval已经做了）
-            // 额外：在页面可见时刷新一次时间
             document.addEventListener('visibilitychange', function() {
                 if (!document.hidden) {
                     updateClockAndGreeting();
                 }
             });
-
-            // ———— 启动页进入动画优化：预加载 ————
-            // 进入主页时，确保时间显示正确
 
             console.log('✨ Eyre 工作台已加载 ✨');
         })();
