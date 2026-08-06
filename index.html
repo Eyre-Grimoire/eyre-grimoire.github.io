@@ -210,7 +210,7 @@
             margin-top: 0.1rem;
         }
 
-        /* --- 分割线 + 天数行 (新增) --- */
+        /* 分割线 + 天数行 */
         .day-divider {
             border-top: 1px solid rgba(30, 60, 40, 0.12);
             margin: 0.4rem 0 0.3rem 0;
@@ -238,10 +238,10 @@
             font-size: clamp(0.75rem, 1.7vw, 0.95rem);
         }
 
-        /* --- 三个卡片 --- */
+        /* --- 四个卡片（原三个 + 奶茶记录 + 今日心情） --- */
         .cards-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 1.2rem;
             margin-top: 0.2rem;
         }
@@ -292,78 +292,172 @@
             letter-spacing: 0.02em;
         }
 
-        /* --- 今日心情区域 --- */
-        .mood-section {
+        /* --- 奶茶记录卡片 & 今日心情卡片 (可点击) --- */
+        #drinkCard,
+        #moodCard {
+            cursor: pointer;
+        }
+        #drinkCard:hover,
+        #moodCard:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 36px rgba(0, 30, 0, 0.12);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* ———— 【新增】今日心情卡片上的预览徽标 ———— */
+        .mood-preview-badge {
+            display: inline-block;
+            margin-top: 0.4rem;
+            font-size: clamp(0.7rem, 1.6vw, 0.85rem);
             background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 28px;
-            padding: 1.6rem 1.6rem 1.8rem 1.6rem;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 8px 24px rgba(0, 30, 0, 0.07);
-            margin-top: 0.2rem;
-            transition: box-shadow 0.3s;
+            padding: 0.15rem 0.7rem;
+            border-radius: 30px;
+            color: #2d5a3d;
+            opacity: 0.8;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .mood-preview-badge .preview-emoji {
+            margin-right: 0.2rem;
+        }
+        .mood-preview-badge .preview-text {
+            font-weight: 400;
+        }
+        .mood-preview-badge.empty-preview {
+            opacity: 0.4;
+            font-style: italic;
         }
 
-        .mood-section:hover {
-            box-shadow: 0 12px 32px rgba(0, 30, 0, 0.10);
-        }
+        /* ———— 【移除】原 mood-section 已删除，替换为卡片入口 ———— */
 
-        .mood-header {
+        /* ———— 【新增】心情详情页 ———— */
+        #moodPage {
+            align-items: flex-start;
+            padding-top: 1.8rem;
+            padding-bottom: 2.8rem;
+        }
+        .mood-container {
+            width: 100%;
+            max-width: 680px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .mood-top-bar {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            margin-bottom: 1rem;
+            gap: 1rem;
+            padding: 0 0.2rem;
         }
-
-        .mood-header h3 {
-            font-size: clamp(1.1rem, 2.8vw, 1.5rem);
+        .mood-back {
+            flex-shrink: 0;
+        }
+        .mood-title {
+            font-size: clamp(1.2rem, 3.5vw, 1.8rem);
             font-weight: 600;
-            color: #1b3a22;
+            color: #1e3a2a;
             letter-spacing: 0.04em;
         }
 
-        .mood-header span {
-            font-size: 1.2rem;
+        /* 输入卡片 */
+        .mood-input-card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 1.4rem 1.4rem 1.6rem 1.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 16px rgba(0, 30, 0, 0.05);
         }
-
-        .mood-input-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.6rem;
-            align-items: center;
+        .mood-input-title {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            font-weight: 500;
+            color: #1b3a22;
+            margin-bottom: 0.8rem;
+            opacity: 0.7;
         }
-
-        .mood-input-row input {
-            flex: 1 1 180px;
+        .mood-input-card input[type="text"] {
+            width: 100%;
             padding: 0.7rem 1.2rem;
             border-radius: 60px;
-            border: 1.5px solid rgba(60, 120, 80, 0.2);
+            border: 1.5px solid rgba(60, 120, 80, 0.15);
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             font-size: clamp(0.95rem, 2.4vw, 1.1rem);
             color: #1b3a22;
             outline: none;
-            transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s;
             font-family: inherit;
-            min-height: 48px;
+            margin-bottom: 0.8rem;
         }
-
-        .mood-input-row input::placeholder {
+        .mood-input-card input[type="text"]::placeholder {
             color: #5a7a6a;
-            opacity: 0.6;
+            opacity: 0.5;
             font-weight: 300;
         }
-
-        .mood-input-row input:focus {
+        .mood-input-card input[type="text"]:focus {
             border-color: #4c8b5a;
-            box-shadow: 0 0 0 4px rgba(60, 140, 80, 0.15);
+            box-shadow: 0 0 0 4px rgba(60, 140, 80, 0.1);
             background: rgba(255, 255, 255, 0.8);
         }
 
-        .mood-input-row button {
-            padding: 0.7rem 1.8rem;
+        /* 表情选择器 */
+        .mood-emoji-selector {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.4rem 0.6rem;
+            margin-bottom: 1rem;
+        }
+        .mood-emoji-label {
+            font-size: clamp(0.85rem, 1.8vw, 1rem);
+            color: #2d5a3d;
+            opacity: 0.7;
+            font-weight: 400;
+            margin-right: 0.2rem;
+        }
+        .mood-emoji-options {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+        .mood-emoji-option {
+            font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s, opacity 0.2s;
+            user-select: none;
+            line-height: 1;
+            padding: 0.1rem 0.15rem;
+            border-radius: 12px;
+            opacity: 0.5;
+            filter: grayscale(0.6);
+            transform: scale(0.9);
+        }
+        .mood-emoji-option:hover {
+            transform: scale(1.15);
+            opacity: 0.8;
+            filter: grayscale(0.2);
+        }
+        .mood-emoji-option.active {
+            opacity: 1;
+            filter: grayscale(0);
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 3px rgba(60, 140, 80, 0.15);
+            border-radius: 16px;
+            padding: 0.1rem 0.3rem;
+        }
+
+        .mood-input-card button {
+            width: 100%;
+            padding: 0.7rem 0;
             border-radius: 60px;
             border: none;
             background: rgba(60, 130, 80, 0.75);
@@ -374,64 +468,373 @@
             font-weight: 500;
             cursor: pointer;
             transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
-            box-shadow: 0 4px 12px rgba(40, 100, 60, 0.2);
+            box-shadow: 0 4px 12px rgba(40, 100, 60, 0.15);
             font-family: inherit;
-            min-height: 48px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.15);
             letter-spacing: 0.04em;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            white-space: nowrap;
         }
-
-        .mood-input-row button:hover {
+        .mood-input-card button:hover {
             background: rgba(50, 140, 80, 0.9);
-            transform: scale(1.02);
-            box-shadow: 0 6px 18px rgba(40, 100, 60, 0.3);
+            transform: scale(1.01);
+            box-shadow: 0 6px 18px rgba(40, 100, 60, 0.25);
         }
-
-        .mood-input-row button:active {
-            transform: scale(0.94);
+        .mood-input-card button:active {
+            transform: scale(0.96);
             transition-duration: 0.08s;
         }
 
-        .mood-display {
-            margin-top: 1.2rem;
-            padding: 0.8rem 1.4rem;
-            border-radius: 40px;
+        /* 今天的心情显示 */
+        .mood-today-display {
             background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 1.2rem 1.4rem 1.4rem 1.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 16px rgba(0, 30, 0, 0.05);
+            min-height: 80px;
+        }
+        .mood-today-label {
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+            font-weight: 500;
+            color: #1b3a22;
+            opacity: 0.5;
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.04em;
+        }
+        .mood-today-content {
             font-size: clamp(1rem, 2.6vw, 1.3rem);
             color: #1b3a22;
-            min-height: 3.4rem;
-            border: 1px dashed rgba(60, 120, 80, 0.2);
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            min-height: 2.6rem;
             word-break: break-word;
             line-height: 1.5;
         }
-
-        .mood-display.has-mood {
-            border: 1px solid rgba(60, 140, 80, 0.3);
-            background: rgba(255, 255, 255, 0.55);
+        .mood-today-content .empty-hint {
+            color: #5a7a6a;
+            opacity: 0.4;
+            font-weight: 300;
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
         }
-
-        .mood-display .mood-emoji {
-            margin-right: 0.5rem;
+        .mood-today-content .today-emoji {
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
             flex-shrink: 0;
         }
-
-        .mood-display .mood-text {
+        .mood-today-content .today-text {
             font-weight: 450;
         }
 
-        .mood-display .empty-hint {
+        /* 历史记录 */
+        .mood-history-section {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 1.2rem 1.4rem 1rem 1.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 16px rgba(0, 30, 0, 0.05);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .mood-history-section::-webkit-scrollbar {
+            width: 4px;
+        }
+        .mood-history-section::-webkit-scrollbar-thumb {
+            background: rgba(60, 120, 80, 0.25);
+            border-radius: 10px;
+        }
+        .mood-history-section::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .mood-history-title {
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            font-weight: 500;
+            color: #1b3a22;
+            opacity: 0.6;
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.04em;
+        }
+        .mood-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+        .mood-history-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.5rem 0.3rem;
+            border-bottom: 1px solid rgba(60, 120, 80, 0.06);
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            color: #1b3a22;
+        }
+        .mood-history-item:last-child {
+            border-bottom: none;
+        }
+        .mood-history-item .h-date {
+            font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+            color: rgba(30, 60, 40, 0.4);
+            flex-shrink: 0;
+            min-width: 80px;
+        }
+        .mood-history-item .h-emoji {
+            font-size: clamp(1.2rem, 2.8vw, 1.6rem);
+            flex-shrink: 0;
+        }
+        .mood-history-item .h-text {
+            flex: 1;
+            font-weight: 400;
+            word-break: break-word;
+        }
+        .mood-history-empty {
+            text-align: center;
+            color: rgba(30, 60, 40, 0.35);
+            font-size: clamp(0.85rem, 1.8vw, 1rem);
+            padding: 1.2rem 0;
+            font-weight: 300;
+        }
+
+        /* ———— 奶茶记录页面 (保持不变) ———— */
+        #drinkPage {
+            align-items: flex-start;
+            padding-top: 1.8rem;
+            padding-bottom: 2.8rem;
+        }
+        .drink-container {
+            width: 100%;
+            max-width: 680px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .drink-top-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0 0.2rem;
+        }
+        .drink-back {
+            flex-shrink: 0;
+        }
+        .drink-title {
+            font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+            font-weight: 600;
+            color: #1e3a2a;
+            letter-spacing: 0.04em;
+        }
+        .category-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 0.5rem 0.8rem;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .category-tab {
+            flex: 1;
+            min-width: 60px;
+            padding: 0.5rem 0.8rem;
+            border: none;
+            border-radius: 30px;
+            background: transparent;
+            font-size: clamp(0.85rem, 2vw, 1.05rem);
+            font-weight: 500;
+            color: #1e3a2a;
+            opacity: 0.6;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+        .category-tab:hover {
+            opacity: 0.85;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .category-tab.active {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            box-shadow: 0 2px 8px rgba(0, 30, 0, 0.06);
+        }
+        .drink-list {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 1.2rem 1.2rem 0.8rem 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            min-height: 120px;
+            max-height: 320px;
+            overflow-y: auto;
+            box-shadow: 0 4px 16px rgba(0, 30, 0, 0.05);
+        }
+        .drink-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .drink-list::-webkit-scrollbar-thumb {
+            background: rgba(60, 120, 80, 0.25);
+            border-radius: 10px;
+        }
+        .drink-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .drink-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 0.4rem;
+            border-bottom: 1px solid rgba(60, 120, 80, 0.08);
+            font-size: clamp(0.9rem, 2.2vw, 1.05rem);
+            color: #1b3a22;
+        }
+        .drink-item:last-child {
+            border-bottom: none;
+        }
+        .drink-item .drink-name {
+            font-weight: 500;
+            flex: 1;
+        }
+        .drink-item .drink-stars {
+            color: #f5b342;
+            font-size: clamp(0.8rem, 1.8vw, 1rem);
+            letter-spacing: 1px;
+            margin-left: 0.6rem;
+            flex-shrink: 0;
+        }
+        .drink-item .drink-time {
+            font-size: clamp(0.6rem, 1.4vw, 0.75rem);
+            color: rgba(30, 60, 40, 0.4);
+            margin-left: 0.8rem;
+            flex-shrink: 0;
+        }
+        .drink-empty {
+            text-align: center;
+            color: rgba(30, 60, 40, 0.35);
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
+            padding: 1.8rem 0;
+            font-weight: 300;
+        }
+        .drink-form {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 1.2rem 1.4rem 1.4rem 1.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 16px rgba(0, 30, 0, 0.05);
+        }
+        .drink-form-title {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            font-weight: 500;
+            color: #1b3a22;
+            margin-bottom: 0.8rem;
+            opacity: 0.7;
+        }
+        .drink-form input[type="text"] {
+            width: 100%;
+            padding: 0.7rem 1.2rem;
+            border-radius: 60px;
+            border: 1.5px solid rgba(60, 120, 80, 0.15);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+            color: #1b3a22;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: inherit;
+            margin-bottom: 0.7rem;
+        }
+        .drink-form input[type="text"]::placeholder {
             color: #5a7a6a;
             opacity: 0.5;
             font-weight: 300;
+        }
+        .drink-form input[type="text"]:focus {
+            border-color: #4c8b5a;
+            box-shadow: 0 0 0 4px rgba(60, 140, 80, 0.1);
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .drink-form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+        .drink-form-row select {
+            flex: 1 1 120px;
+            padding: 0.6rem 1rem;
+            border-radius: 60px;
+            border: 1.5px solid rgba(60, 120, 80, 0.15);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            color: #1b3a22;
+            outline: none;
+            font-family: inherit;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        .drink-form-row select:focus {
+            border-color: #4c8b5a;
+        }
+        .drink-form-row .star-rating {
+            display: flex;
+            gap: 0.15rem;
+            align-items: center;
+        }
+        .drink-form-row .star-rating .star {
+            font-size: clamp(1.4rem, 3.5vw, 2rem);
+            color: #d0d0d0;
+            cursor: pointer;
+            transition: color 0.15s, transform 0.15s;
+            user-select: none;
+            line-height: 1;
+        }
+        .drink-form-row .star-rating .star.active {
+            color: #f5b342;
+        }
+        .drink-form-row .star-rating .star:hover {
+            transform: scale(1.15);
+        }
+        .drink-form-row .star-rating .star.active:hover {
+            transform: scale(1.15);
+        }
+        .drink-form button {
+            width: 100%;
+            padding: 0.7rem 0;
+            border-radius: 60px;
+            border: none;
+            background: rgba(60, 130, 80, 0.75);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            color: #fff;
+            font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+            box-shadow: 0 4px 12px rgba(40, 100, 60, 0.15);
+            font-family: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            letter-spacing: 0.04em;
+        }
+        .drink-form button:hover {
+            background: rgba(50, 140, 80, 0.9);
+            transform: scale(1.01);
+            box-shadow: 0 6px 18px rgba(40, 100, 60, 0.25);
+        }
+        .drink-form button:active {
+            transform: scale(0.96);
+            transition-duration: 0.08s;
         }
 
         /* ———— 响应式微调 ———— */
@@ -441,6 +844,11 @@
             }
             #mainPage {
                 padding-top: 1.2rem;
+                padding-bottom: 1.8rem;
+            }
+            #drinkPage,
+            #moodPage {
+                padding-top: 1rem;
                 padding-bottom: 1.8rem;
             }
             .top-bar {
@@ -464,51 +872,81 @@
                 min-height: 120px;
                 padding: 1.2rem 0.6rem;
             }
-            .mood-section {
+            .mood-input-card {
                 padding: 1.2rem 1rem 1.4rem 1rem;
             }
-            .mood-input-row input {
-                flex: 1 1 100%;
+            .mood-today-display {
+                padding: 1rem 1rem 1.2rem 1rem;
+            }
+            .mood-history-section {
+                padding: 1rem 1rem 0.8rem 1rem;
+                max-height: 220px;
+            }
+            .mood-emoji-option {
+                font-size: clamp(1.6rem, 5vw, 2.2rem);
+            }
+            .mood-input-card input[type="text"] {
                 min-height: 44px;
             }
-            .mood-input-row button {
-                flex: 1 1 100%;
+            .mood-input-card button {
                 min-height: 44px;
             }
-            .mood-display {
-                min-height: 2.8rem;
-                padding: 0.6rem 1rem;
+            .mood-top-bar {
+                flex-wrap: wrap;
+            }
+            .drink-top-bar {
+                flex-wrap: wrap;
+            }
+            .drink-form-row select {
+                flex: 1 1 100%;
+            }
+            .drink-form-row .star-rating {
+                justify-content: center;
+                flex: 1 1 100%;
+            }
+            .drink-list {
+                max-height: 240px;
+                padding: 1rem 1rem 0.6rem 1rem;
+            }
+            .mood-history-item .h-date {
+                min-width: 60px;
+                font-size: clamp(0.6rem, 1.2vw, 0.7rem);
             }
         }
 
         @media (max-width: 380px) {
             .cards-row {
-                grid-template-columns: 1fr;
-                gap: 0.7rem;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.6rem;
             }
             .card {
                 min-height: 100px;
                 flex-direction: row;
-                gap: 0.8rem;
-                padding: 0.8rem 1rem;
+                gap: 0.6rem;
+                padding: 0.8rem 0.8rem;
                 justify-content: flex-start;
                 text-align: left;
             }
             .card-emoji {
-                font-size: 2.2rem;
+                font-size: 2rem;
                 margin-bottom: 0;
                 flex-shrink: 0;
             }
             .card-title {
-                font-size: 1rem;
+                font-size: 0.95rem;
             }
             .card-desc {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
             }
             .card-text-group {
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
+            }
+            .mood-preview-badge {
+                font-size: 0.6rem;
+                padding: 0.05rem 0.5rem;
+                margin-top: 0.2rem;
             }
         }
 
@@ -538,17 +976,15 @@
                     <div class="date-display" id="dateDisplay">----年--月--日</div>
                     <div class="time-display" id="timeDisplay">00:00:00</div>
                     <div class="greeting-display" id="greetingDisplay">☀️ 下午好</div>
-                    <!-- 👇 新增：分割线 + 使用天数 -->
                     <div class="day-divider"></div>
                     <div class="day-count">
                         <span class="day-icon">📅</span>
                         这是你使用工作台的第 <span class="day-number" id="dayNumber">1</span> 天
                     </div>
-                    <!-- 👆 新增 -->
                 </div>
             </div>
 
-            <!-- 三个卡片 -->
+            <!-- 【修改】五个卡片：日记、读书、商情简报、奶茶记录、今日心情 -->
             <div class="cards-row">
                 <div class="card">
                     <div class="card-emoji">📔</div>
@@ -572,27 +1008,114 @@
                     </div>
                 </div>
                 <!-- 奶茶记录卡片 -->
-                <div class="card" onclick="location.href='tea-record.html'">
+                <div class="card" id="drinkCard">
                     <div class="card-emoji">🧋</div>
                     <div class="card-text-group">
                         <div class="card-title">奶茶记录</div>
                         <div class="card-desc">记录今日的快乐水</div>
                     </div>
                 </div>
+                <!-- 【新增】今日心情卡片 -->
+                <div class="card" id="moodCard">
+                    <div class="card-emoji">💭</div>
+                    <div class="card-text-group">
+                        <div class="card-title">今日心情</div>
+                        <div class="card-desc">记录今日情绪</div>
+                        <!-- 预览徽标：显示今天的心情摘要 -->
+                        <div class="mood-preview-badge empty-preview" id="moodPreviewBadge">
+                            <span class="preview-emoji">🌸</span>
+                            <span class="preview-text">记一笔心情</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- 今日心情 -->
-            <div class="mood-section">
-                <div class="mood-header">
-                    <span>💭</span>
-                    <h3>今日心情</h3>
+            <!-- 【移除】原 mood-section 已删除，替换为卡片入口 -->
+
+        </div>
+    </div>
+
+    <!-- ===== 奶茶记录页 ===== -->
+    <div id="drinkPage" class="page">
+        <div class="drink-container">
+            <div class="drink-top-bar">
+                <a class="back-link drink-back" id="drinkBackBtn">← 返回工作台</a>
+                <span class="drink-title">🧋 奶茶记录</span>
+            </div>
+            <div class="category-tabs" id="categoryTabs">
+                <button class="category-tab active" data-category="奶茶">奶茶</button>
+                <button class="category-tab" data-category="饮料">饮料</button>
+                <button class="category-tab" data-category="咖啡">咖啡</button>
+                <button class="category-tab" data-category="酒类">酒类</button>
+            </div>
+            <div class="drink-list" id="drinkList">
+                <div class="drink-empty">🍃 还没有记录，写点什么吧</div>
+            </div>
+            <div class="drink-form">
+                <div class="drink-form-title">📝 添加记录</div>
+                <input type="text" id="drinkInput" placeholder="今天有没有喝什么？" maxlength="100" />
+                <div class="drink-form-row">
+                    <select id="drinkCategorySelect">
+                        <option value="奶茶">奶茶</option>
+                        <option value="饮料">饮料</option>
+                        <option value="咖啡">咖啡</option>
+                        <option value="酒类">酒类</option>
+                    </select>
+                    <div class="star-rating" id="starRating">
+                        <span class="star" data-value="1">☆</span>
+                        <span class="star" data-value="2">☆</span>
+                        <span class="star" data-value="3">☆</span>
+                        <span class="star" data-value="4">☆</span>
+                        <span class="star" data-value="5">☆</span>
+                    </div>
                 </div>
-                <div class="mood-input-row">
-                    <input type="text" id="moodInput" placeholder="今天感觉怎么样？" maxlength="200" autocomplete="off" />
-                    <button id="moodSaveBtn">保存</button>
+                <button id="drinkSaveBtn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 【新增】心情详情页 ===== -->
+    <div id="moodPage" class="page">
+        <div class="mood-container">
+            <!-- 顶部导航 -->
+            <div class="mood-top-bar">
+                <a class="back-link mood-back" id="moodBackBtn">← 返回工作台</a>
+                <span class="mood-title">💭 今日心情</span>
+            </div>
+
+            <!-- 输入卡片 -->
+            <div class="mood-input-card">
+                <div class="mood-input-title">📝 记录今天的心情</div>
+                <input type="text" id="moodTextInput" placeholder="今天心情如何？" maxlength="200" autocomplete="off" />
+
+                <!-- 表情选择器 -->
+                <div class="mood-emoji-selector">
+                    <span class="mood-emoji-label">选择心情：</span>
+                    <div class="mood-emoji-options" id="moodEmojiOptions">
+                        <span class="mood-emoji-option" data-emoji="😔">😔</span>
+                        <span class="mood-emoji-option" data-emoji="😕">😕</span>
+                        <span class="mood-emoji-option" data-emoji="😐">😐</span>
+                        <span class="mood-emoji-option" data-emoji="🙂">🙂</span>
+                        <span class="mood-emoji-option" data-emoji="😄">😄</span>
+                    </div>
                 </div>
-                <div class="mood-display" id="moodDisplay">
-                    <span class="empty-hint">还没有记录，写点什么吧 ✍️</span>
+
+                <button id="moodSaveBtn">保存</button>
+            </div>
+
+            <!-- 今天的心情显示 -->
+            <div class="mood-today-display">
+                <div class="mood-today-label">📌 今天的心情</div>
+                <div class="mood-today-content" id="moodTodayContent">
+                    <span class="empty-hint">还没有记录今天的心情 ✍️</span>
+                </div>
+            </div>
+
+            <!-- 历史记录 -->
+            <div class="mood-history-section">
+                <div class="mood-history-title">📋 历史记录</div>
+                <div class="mood-history-list" id="moodHistoryList">
+                    <div class="mood-history-empty">暂无历史记录</div>
                 </div>
             </div>
         </div>
@@ -605,30 +1128,56 @@
             // ———— DOM 引用 ————
             const startPage = document.getElementById('startPage');
             const mainPage = document.getElementById('mainPage');
+            const drinkPage = document.getElementById('drinkPage');
+            const moodPage = document.getElementById('moodPage'); // 【新增】
             const helloBtn = document.getElementById('helloBtn');
             const backBtn = document.getElementById('backBtn');
+            const drinkBackBtn = document.getElementById('drinkBackBtn');
+            const drinkCard = document.getElementById('drinkCard');
+            const moodCard = document.getElementById('moodCard'); // 【新增】
+            const moodBackBtn = document.getElementById('moodBackBtn'); // 【新增】
 
             const dateDisplay = document.getElementById('dateDisplay');
             const timeDisplay = document.getElementById('timeDisplay');
             const greetingDisplay = document.getElementById('greetingDisplay');
             const dayNumberEl = document.getElementById('dayNumber');
 
-            const moodInput = document.getElementById('moodInput');
+            // 【新增】心情相关 DOM
+            const moodTextInput = document.getElementById('moodTextInput');
             const moodSaveBtn = document.getElementById('moodSaveBtn');
-            const moodDisplay = document.getElementById('moodDisplay');
+            const moodTodayContent = document.getElementById('moodTodayContent');
+            const moodHistoryList = document.getElementById('moodHistoryList');
+            const moodEmojiOptions = document.getElementById('moodEmojiOptions');
+            const moodPreviewBadge = document.getElementById('moodPreviewBadge');
 
             // ———— 页面切换 ————
             function showPage(pageId) {
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                document.getElementById(pageId).classList.add('active');
+                const target = document.getElementById(pageId);
+                if (target) target.classList.add('active');
+                // 如果切换到奶茶记录页，刷新列表
+                if (pageId === 'drinkPage') {
+                    renderDrinkList(currentCategory);
+                }
+                // 【新增】如果切换到心情页，刷新数据
+                if (pageId === 'moodPage') {
+                    loadAndRenderMood();
+                    // 聚焦输入框
+                    setTimeout(() => moodTextInput.focus(), 300);
+                }
+                // 如果切换到主页，更新预览徽标
+                if (pageId === 'mainPage') {
+                    updateMoodPreviewBadge();
+                }
             }
 
             helloBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 showPage('mainPage');
                 updateClockAndGreeting();
-                loadMood();
-                setTimeout(() => moodInput.focus(), 300);
+                setTimeout(() => {
+                    // 聚焦到第一个可输入的地方（如果有）
+                }, 300);
             });
 
             backBtn.addEventListener('click', function(e) {
@@ -636,15 +1185,55 @@
                 showPage('startPage');
             });
 
+            drinkBackBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('mainPage');
+            });
+
+            drinkCard.addEventListener('click', function() {
+                showPage('drinkPage');
+            });
+
+            // 【新增】心情卡片点击
+            moodCard.addEventListener('click', function() {
+                showPage('moodPage');
+            });
+
+            moodBackBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('mainPage');
+            });
+
             // ———— 工具函数 ————
             function pad(n) {
                 return String(n).padStart(2, '0');
             }
 
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // 获取今日日期字符串 YYYY-MM-DD
+            function getTodayStr() {
+                const now = new Date();
+                return now.getFullYear() + '-' +
+                    String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(now.getDate()).padStart(2, '0');
+            }
+
+            // 格式化日期显示
+            function formatDateDisplay(dateStr) {
+                const parts = dateStr.split('-');
+                if (parts.length !== 3) return dateStr;
+                return parts[0] + '年' + parseInt(parts[1], 10) + '月' + parseInt(parts[2], 10) + '日';
+            }
+
             // ———— 计算使用天数 (从2026年8月3日算第1天) ————
             function updateDayCount() {
                 const today = new Date();
-                const baseDate = new Date(2026, 7, 3); // 2026-08-03
+                const baseDate = new Date(2026, 7, 3);
                 const diffMs = today - baseDate;
                 const diffDays = Math.floor(diffMs / (24 * 60 * 60 * 1000)) + 1;
                 const days = diffDays < 0 ? 0 : diffDays;
@@ -683,82 +1272,407 @@
                 }
                 greetingDisplay.textContent = emoji + ' ' + greeting;
 
-                // 更新天数
                 updateDayCount();
             }
 
-            // 立即执行，然后每秒更新
             updateClockAndGreeting();
             setInterval(updateClockAndGreeting, 1000);
 
-            // ———— 今日心情 (localStorage) ————
-            const MOOD_KEY = 'eyre_workbench_mood';
+            // ============================================================
+            // 【新增】心情数据管理
+            // ============================================================
 
-            function loadMood() {
-                const saved = localStorage.getItem(MOOD_KEY);
-                if (saved && saved.trim() !== '') {
-                    const displayText = saved.trim();
-                    moodDisplay.innerHTML =
-                        '<span class="mood-emoji">🌸</span><span class="mood-text">' +
-                        escapeHtml(displayText) +
-                        '</span>';
-                    moodDisplay.classList.add('has-mood');
-                } else {
-                    moodDisplay.innerHTML = '<span class="empty-hint">还没有记录，写点什么吧 ✍️</span>';
-                    moodDisplay.classList.remove('has-mood');
-                }
+            const MOOD_STORAGE_KEY = 'eyre_mood_records_v2';
+
+            // 默认数据
+            function getDefaultMoodData() {
+                return [];
             }
 
-            function escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
+            // 加载所有心情记录
+            function loadAllMoodRecords() {
+                try {
+                    const data = localStorage.getItem(MOOD_STORAGE_KEY);
+                    if (data) {
+                        const parsed = JSON.parse(data);
+                        if (Array.isArray(parsed)) {
+                            return parsed;
+                        }
+                    }
+                } catch (e) { /* ignore */ }
+                return getDefaultMoodData();
             }
 
-            function saveMood(text) {
+            // 保存所有心情记录
+            function saveAllMoodRecords(records) {
+                localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(records));
+            }
+
+            // 获取今天的心情记录（如果有）
+            function getTodayMood(records) {
+                const today = getTodayStr();
+                return records.find(r => r.date === today) || null;
+            }
+
+            // 获取所有历史记录（按日期倒序）
+            function getHistoryRecords(records) {
+                return records.slice().sort((a, b) => b.date.localeCompare(a.date));
+            }
+
+            // 保存心情（如果今天已有则覆盖，否则新增）
+            function saveMood(text, emoji) {
                 const trimmed = text.trim();
                 if (trimmed === '') {
-                    localStorage.removeItem(MOOD_KEY);
-                    loadMood();
-                    return;
+                    // 如果文字为空，不保存
+                    return false;
                 }
-                localStorage.setItem(MOOD_KEY, trimmed);
-                loadMood();
+                const today = getTodayStr();
+                const records = loadAllMoodRecords();
+                const existingIndex = records.findIndex(r => r.date === today);
+                const newRecord = {
+                    date: today,
+                    text: trimmed,
+                    emoji: emoji || '😐'
+                };
+                if (existingIndex >= 0) {
+                    records[existingIndex] = newRecord;
+                } else {
+                    records.push(newRecord);
+                }
+                saveAllMoodRecords(records);
+                return true;
             }
 
-            moodSaveBtn.addEventListener('click', function() {
-                const val = moodInput.value;
-                saveMood(val);
-                moodInput.value = '';
-                setTimeout(() => moodInput.focus(), 100);
+            // 加载并渲染心情数据
+            function loadAndRenderMood() {
+                const records = loadAllMoodRecords();
+                const today = getTodayStr();
+                const todayRecord = records.find(r => r.date === today);
+
+                // 渲染今日心情
+                if (todayRecord) {
+                    moodTodayContent.innerHTML =
+                        '<span class="today-emoji">' + escapeHtml(todayRecord.emoji || '😐') + '</span>' +
+                        '<span class="today-text">' + escapeHtml(todayRecord.text) + '</span>';
+                } else {
+                    moodTodayContent.innerHTML = '<span class="empty-hint">还没有记录今天的心情 ✍️</span>';
+                }
+
+                // 渲染历史记录
+                const history = getHistoryRecords(records);
+                if (history.length === 0) {
+                    moodHistoryList.innerHTML = '<div class="mood-history-empty">暂无历史记录</div>';
+                } else {
+                    let html = '';
+                    history.forEach(r => {
+                        const displayDate = formatDateDisplay(r.date);
+                        html += `
+                            <div class="mood-history-item">
+                                <span class="h-date">${escapeHtml(displayDate)}</span>
+                                <span class="h-emoji">${escapeHtml(r.emoji || '😐')}</span>
+                                <span class="h-text">${escapeHtml(r.text)}</span>
+                            </div>
+                        `;
+                    });
+                    moodHistoryList.innerHTML = html;
+                }
+
+                // 更新主页的预览徽标
+                updateMoodPreviewBadge();
+            }
+
+            // 更新主页卡片上的预览徽标
+            function updateMoodPreviewBadge() {
+                const records = loadAllMoodRecords();
+                const today = getTodayStr();
+                const todayRecord = records.find(r => r.date === today);
+                if (todayRecord) {
+                    const emoji = todayRecord.emoji || '🌸';
+                    const text = todayRecord.text.length > 12 ?
+                        todayRecord.text.slice(0, 12) + '…' :
+                        todayRecord.text;
+                    moodPreviewBadge.innerHTML =
+                        '<span class="preview-emoji">' + escapeHtml(emoji) + '</span>' +
+                        '<span class="preview-text">' + escapeHtml(text) + '</span>';
+                    moodPreviewBadge.classList.remove('empty-preview');
+                } else {
+                    moodPreviewBadge.innerHTML =
+                        '<span class="preview-emoji">🌸</span>' +
+                        '<span class="preview-text">记一笔心情</span>';
+                    moodPreviewBadge.classList.add('empty-preview');
+                }
+            }
+
+            // ———— 表情选择器 ————
+            let selectedEmoji = '😐';
+
+            moodEmojiOptions.addEventListener('click', function(e) {
+                const option = e.target.closest('.mood-emoji-option');
+                if (!option) return;
+                const emoji = option.dataset.emoji;
+                if (!emoji) return;
+                // 取消所有选中状态
+                moodEmojiOptions.querySelectorAll('.mood-emoji-option').forEach(el => {
+                    el.classList.remove('active');
+                });
+                option.classList.add('active');
+                selectedEmoji = emoji;
             });
 
-            moodInput.addEventListener('keydown', function(e) {
+            // 默认选中 😐
+            const defaultOption = moodEmojiOptions.querySelector('[data-emoji="😐"]');
+            if (defaultOption) {
+                defaultOption.classList.add('active');
+                selectedEmoji = '😐';
+            }
+
+            // ———— 保存心情 ————
+            moodSaveBtn.addEventListener('click', function() {
+                const text = moodTextInput.value.trim();
+                if (text === '') {
+                    alert('请写下今天的心情 ✍️');
+                    moodTextInput.focus();
+                    return;
+                }
+                const success = saveMood(text, selectedEmoji);
+                if (success) {
+                    moodTextInput.value = '';
+                    // 重置表情选择到默认
+                    moodEmojiOptions.querySelectorAll('.mood-emoji-option').forEach(el => {
+                        el.classList.remove('active');
+                    });
+                    const defaultOpt = moodEmojiOptions.querySelector('[data-emoji="😐"]');
+                    if (defaultOpt) {
+                        defaultOpt.classList.add('active');
+                        selectedEmoji = '😐';
+                    } else {
+                        selectedEmoji = '😐';
+                    }
+                    loadAndRenderMood();
+                    // 提示保存成功
+                    moodTodayContent.style.transition = 'opacity 0.2s';
+                    moodTodayContent.style.opacity = '0.6';
+                    setTimeout(() => {
+                        moodTodayContent.style.opacity = '1';
+                    }, 150);
+                    moodTextInput.focus();
+                } else {
+                    alert('保存失败，请重试');
+                }
+            });
+
+            moodTextInput.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
                     moodSaveBtn.click();
                 }
             });
 
-            // 页面加载时加载心情
-            loadMood();
+            // ———— 迁移旧数据 (从 MOOD_KEY 迁移) ————
+            function migrateOldMoodData() {
+                const oldKey = 'eyre_workbench_mood';
+                try {
+                    const oldData = localStorage.getItem(oldKey);
+                    if (oldData && oldData.trim() !== '') {
+                        // 检查是否已经迁移过（新存储中有数据）
+                        const newRecords = loadAllMoodRecords();
+                        if (newRecords.length === 0) {
+                            // 尝试迁移
+                            const today = getTodayStr();
+                            // 判断旧数据是否包含日期信息？没有，直接用今天
+                            const newRecord = {
+                                date: today,
+                                text: oldData.trim(),
+                                emoji: '🌸' // 默认用🌸
+                            };
+                            saveAllMoodRecords([newRecord]);
+                            // 删除旧数据
+                            localStorage.removeItem(oldKey);
+                            console.log('✅ 已迁移旧心情数据');
+                        }
+                    }
+                } catch (e) { /* ignore */ }
+            }
 
+            // ———— 奶茶记录 (localStorage) ————
+            const DRINK_KEY = 'eyre_drink_records';
+
+            function getDefaultDrinks() {
+                return { records: [] };
+            }
+
+            function loadDrinkRecords() {
+                try {
+                    const data = localStorage.getItem(DRINK_KEY);
+                    if (data) {
+                        const parsed = JSON.parse(data);
+                        if (parsed && typeof parsed === 'object' && Array.isArray(parsed.records)) {
+                            return parsed;
+                        }
+                    }
+                } catch (e) {}
+                return getDefaultDrinks();
+            }
+
+            function saveDrinkRecords(data) {
+                localStorage.setItem(DRINK_KEY, JSON.stringify(data));
+            }
+
+            let currentCategory = '奶茶';
+            let selectedRating = 0;
+
+            const categoryTabs = document.getElementById('categoryTabs');
+            const drinkList = document.getElementById('drinkList');
+            const drinkInput = document.getElementById('drinkInput');
+            const drinkCategorySelect = document.getElementById('drinkCategorySelect');
+            const starRating = document.getElementById('starRating');
+            const drinkSaveBtn = document.getElementById('drinkSaveBtn');
+
+            // 分类切换
+            categoryTabs.addEventListener('click', function(e) {
+                const tab = e.target.closest('.category-tab');
+                if (!tab) return;
+                categoryTabs.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentCategory = tab.dataset.category;
+                renderDrinkList(currentCategory);
+            });
+
+            // 渲染记录列表
+            function renderDrinkList(category) {
+                const data = loadDrinkRecords();
+                const filtered = data.records.filter(r => r.category === category);
+                filtered.sort((a, b) => b.id - a.id);
+
+                if (filtered.length === 0) {
+                    drinkList.innerHTML = `<div class="drink-empty">🍃 还没有记录，写点什么吧</div>`;
+                    return;
+                }
+
+                let html = '';
+                filtered.forEach(r => {
+                    const stars = '⭐'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+                    const timeStr = r.date || '';
+                    html += `
+                        <div class="drink-item">
+                            <span class="drink-name">${escapeHtml(r.name)}</span>
+                            <span class="drink-stars">${stars}</span>
+                            <span class="drink-time">${timeStr}</span>
+                        </div>
+                    `;
+                });
+                drinkList.innerHTML = html;
+            }
+
+            // 星级选择
+            starRating.addEventListener('click', function(e) {
+                const star = e.target.closest('.star');
+                if (!star) return;
+                const value = parseInt(star.dataset.value, 10);
+                selectedRating = value;
+                starRating.querySelectorAll('.star').forEach(s => {
+                    const v = parseInt(s.dataset.value, 10);
+                    s.classList.toggle('active', v <= value);
+                });
+            });
+
+            // 保存记录
+            drinkSaveBtn.addEventListener('click', function() {
+                const name = drinkInput.value.trim();
+                if (!name) {
+                    alert('请输入饮品名称 ✍️');
+                    drinkInput.focus();
+                    return;
+                }
+                if (selectedRating === 0) {
+                    alert('请选择喜好程度 ⭐');
+                    return;
+                }
+                const category = drinkCategorySelect.value;
+
+                const data = loadDrinkRecords();
+                const now = new Date();
+                const dateStr =
+                    now.getFullYear() + '-' +
+                    String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(now.getDate()).padStart(2, '0');
+
+                data.records.push({
+                    id: Date.now(),
+                    name: name,
+                    category: category,
+                    rating: selectedRating,
+                    date: dateStr
+                });
+
+                saveDrinkRecords(data);
+                renderDrinkList(currentCategory);
+
+                drinkInput.value = '';
+                selectedRating = 0;
+                starRating.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+                drinkInput.focus();
+            });
+
+            drinkInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    drinkSaveBtn.click();
+                }
+            });
+
+            // ============================================================
+            // 【新增】初始化
+            // ============================================================
+
+            // 迁移旧数据
+            migrateOldMoodData();
+
+            // 加载心情数据
+            loadAndRenderMood();
+
+            // 确保启动页可见
             document.addEventListener('DOMContentLoaded', function() {
                 if (mainPage.classList.contains('active')) {
-                    loadMood();
+                    // 如果主页激活，加载心情预览
+                    updateMoodPreviewBadge();
                 }
-                if (!startPage.classList.contains('active') && !mainPage.classList.contains('active')) {
+                if (!startPage.classList.contains('active') &&
+                    !mainPage.classList.contains('active') &&
+                    !drinkPage.classList.contains('active') &&
+                    !moodPage.classList.contains('active')) {
                     startPage.classList.add('active');
                 }
+                // 初始化奶茶记录页的分类高亮
+                const firstTab = categoryTabs.querySelector('.category-tab');
+                if (firstTab) {
+                    categoryTabs.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                    firstTab.classList.add('active');
+                    currentCategory = firstTab.dataset.category;
+                }
+                if (drinkPage.classList.contains('active')) {
+                    renderDrinkList(currentCategory);
+                }
+                if (moodPage.classList.contains('active')) {
+                    loadAndRenderMood();
+                }
+                // 更新预览徽标
+                updateMoodPreviewBadge();
             });
 
             document.addEventListener('visibilitychange', function() {
                 if (!document.hidden) {
                     updateClockAndGreeting();
+                    // 如果心情页可见，刷新数据
+                    if (moodPage.classList.contains('active')) {
+                        loadAndRenderMood();
+                    }
+                    // 更新预览徽标
+                    updateMoodPreviewBadge();
                 }
             });
 
-            console.log('✨ Eyre 工作台已加载 ✨');
+            console.log('✨ Eyre 工作台已加载 (含今日心情卡片) ✨');
         })();
     </script>
 </body>
