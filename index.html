@@ -356,6 +356,12 @@
             font-weight: 400;
             letter-spacing: 0.02em;
             min-height: 1.4em;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 占位卡片（日记/读书/商情）描述更淡 */
+        .card-desc.placeholder {
+            opacity: 0.45;
         }
 
         .card-text-group {
@@ -1323,48 +1329,51 @@
 
             <!-- 卡片区 -->
             <div class="cards-row">
-                <!-- 日记 -->
+                <!-- 日记（占位） -->
                 <div class="card">
                     <div class="card-emoji">📔</div>
                     <div class="card-text-group">
                         <div class="card-title">日记</div>
-                        <div class="card-desc">记录今日所思所想</div>
+                        <div class="card-desc placeholder">尚未开始 🌱</div>
                     </div>
                 </div>
-                <!-- 读书 -->
+                <!-- 读书（占位） -->
                 <div class="card">
                     <div class="card-emoji">📚</div>
                     <div class="card-text-group">
                         <div class="card-title">读书</div>
-                        <div class="card-desc">沉浸文字的世界</div>
+                        <div class="card-desc placeholder">尚未开始 🌱</div>
                     </div>
                 </div>
-                <!-- 商情简报 -->
+                <!-- 商情简报（占位） -->
                 <div class="card">
                     <div class="card-emoji">📊</div>
                     <div class="card-text-group">
                         <div class="card-title">商情简报</div>
-                        <div class="card-desc">洞察市场动向</div>
+                        <div class="card-desc placeholder">尚未开始 🌱</div>
                     </div>
                 </div>
-                <!-- 奶茶记录 -->
+                <!-- 奶茶记录（数据卡片） -->
                 <div class="card" id="drinkCard">
                     <div class="card-emoji">🧋</div>
                     <div class="card-text-group">
                         <div class="card-title">奶茶记录</div>
-                        <div class="card-desc">记录今日的快乐水</div>
+                        <!-- 描述文字会被 JavaScript 动态更新 -->
+                        <div class="card-desc" id="drinkStatsDesc">加载中...</div>
                     </div>
                 </div>
 
-                <!-- 今日心情卡片 -->
+                <!-- 今日心情（数据卡片） -->
                 <div class="card" id="moodCard">
                     <div class="card-emoji">💭</div>
                     <div class="card-text-group">
                         <div class="card-title">今日心情</div>
+                        <!-- 描述文字：默认显示统计信息，悬停时切换为鼓励语 -->
                         <div class="card-desc">
-                            <span class="desc-default">记录今日情绪</span>
+                            <span class="desc-default" id="moodStatsDesc">加载中...</span>
                             <span class="desc-hover">✨ 此刻心情如何，记录一下吧</span>
                         </div>
+                        <!-- 预览徽标 -->
                         <div class="mood-preview-badge empty-preview" id="moodPreviewBadge">
                             <span class="preview-emoji">🌸</span>
                             <span class="preview-text" style="display:none;"></span>
@@ -1538,17 +1547,18 @@
                 }
 
                 if (pageId === 'mainPage') {
-                    // 回到主页时清空搜索框和搜索状态
+                    // 回到主页时更新卡片统计数据
+                    updateDrinkCardStats();
+                    updateMoodCardStats();
+                    // 清空搜索框和搜索状态（如果有）
                     globalSearchInput.value = '';
                     window._searchKeyword = '';
                     updateMoodPreviewBadge();
-                    // 如果搜索结果栏可见，隐藏它
                     searchResultBar.classList.remove('visible');
                     categoryTabs.classList.remove('hidden');
                 }
 
                 if (pageId === 'startPage') {
-                    // 回到启动页也清空搜索
                     globalSearchInput.value = '';
                     window._searchKeyword = '';
                     searchResultBar.classList.remove('visible');
@@ -1695,6 +1705,10 @@
                     moodHistoryList.innerHTML = html;
                 }
                 updateMoodPreviewBadge();
+                // 同时更新主页卡片统计
+                if (mainPage.classList.contains('active')) {
+                    updateMoodCardStats();
+                }
             }
 
             function updateMoodPreviewBadge() {
@@ -1746,6 +1760,10 @@
                     moodTodayContent.style.opacity = '0.6';
                     setTimeout(() => { moodTodayContent.style.opacity = '1'; }, 150);
                     moodTextInput.focus();
+                    // 更新主页卡片
+                    if (mainPage.classList.contains('active')) {
+                        updateMoodCardStats();
+                    }
                 } else {
                     alert('保存失败，请重试');
                 }
@@ -1897,7 +1915,6 @@
             categoryTabs.addEventListener('click', function(e) {
                 const tab = e.target.closest('.category-tab');
                 if (!tab) return;
-                // 如果当前有搜索词，先清除搜索状态再切换分类
                 if (window._searchKeyword && window._searchKeyword.trim() !== '') {
                     clearSearchState();
                 }
@@ -1907,29 +1924,24 @@
                 renderDrinkList(currentCategory);
             });
 
-            // ★ 清空搜索状态（内部使用）
             function clearSearchState() {
                 window._searchKeyword = '';
                 searchResultBar.classList.remove('visible');
                 categoryTabs.classList.remove('hidden');
-                // 清除高亮分类
                 categoryTabs.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
                 const firstTab = categoryTabs.querySelector('.category-tab');
                 if (firstTab) {
                     firstTab.classList.add('active');
                     currentCategory = firstTab.dataset.category;
                 }
-                // 清空搜索框
                 globalSearchInput.value = '';
             }
 
-            // ★ 清除搜索按钮点击
             clearSearchBtn.addEventListener('click', function() {
                 clearSearchState();
                 renderDrinkList(currentCategory);
             });
 
-            // ★ 渲染分类列表（原有逻辑，保持不变）
             async function renderDrinkList(category) {
                 try {
                     const records = await getDrinkRecordsByCategory(category);
@@ -1976,11 +1988,14 @@
                             if (!confirm('确定要删除这条记录吗？')) return;
                             try {
                                 await deleteDrinkRecord(id);
-                                // 删除后根据当前状态刷新
                                 if (window._searchKeyword && window._searchKeyword.trim() !== '') {
                                     await renderDrinkListWithSearch(window._searchKeyword.trim());
                                 } else {
                                     await renderDrinkList(currentCategory);
+                                }
+                                // 更新主页卡片
+                                if (mainPage.classList.contains('active')) {
+                                    updateDrinkCardStats();
                                 }
                             } catch (err) {
                                 alert('删除失败：' + err.message);
@@ -1994,34 +2009,22 @@
             }
 
             // ================================================================
-            //  ★ Fuse.js 搜索逻辑（核心新增）
+            //  ★ Fuse.js 搜索逻辑
             // ================================================================
 
-            /**
-             * 使用 Fuse.js 在奶茶记录中执行模糊搜索
-             * @param {string} keyword 搜索关键词
-             * @param {Array} records 要搜索的记录数组
-             * @returns {Array} 匹配的记录数组（已按相关性排序）
-             */
             function fuseSearchDrinks(keyword, records) {
                 if (!keyword || keyword.trim() === '' || !records || records.length === 0) {
                     return records || [];
                 }
-
-                // 1. 配置 Fuse.js 搜索选项
-                //    - keys: 指定搜索的字段
-                //    - threshold: 匹配阈值，0.0 为完全匹配，1.0 为完全模糊。0.35 在容错和准确性之间取得平衡
-                //    - distance: 匹配距离，影响模糊匹配的灵敏度
-                //    - includeScore: 包含匹配分数，便于调试（此处不启用，提高性能）
                 const fuseOptions = {
                     keys: [
-                        { name: 'brand', weight: 1.5 }, // 品牌权重较高
-                        { name: 'name', weight: 1.8 }, // 名称权重最高
+                        { name: 'brand', weight: 1.5 },
+                        { name: 'name', weight: 1.8 },
                         { name: 'category', weight: 1.0 },
-                        { name: 'note', weight: 0.6 }, // 备注权重较低
-                        { name: 'date', weight: 0.4 } // 日期权重最低
+                        { name: 'note', weight: 0.6 },
+                        { name: 'date', weight: 0.4 }
                     ],
-                    threshold: 0.35, // 0.35 可容忍一定程度的拼写错误
+                    threshold: 0.35,
                     distance: 60,
                     includeMatches: false,
                     minMatchCharLength: 1,
@@ -2030,51 +2033,31 @@
                     ignoreLocation: false,
                     location: 0,
                 };
-
-                // 2. 创建 Fuse 实例
                 const fuse = new Fuse(records, fuseOptions);
-
-                // 3. 执行搜索，返回匹配结果
                 const result = fuse.search(keyword.trim());
-
-                // 4. 提取匹配的原始记录（按相关性排序）
                 return result.map(item => item.item);
             }
 
-            /**
-             * 渲染带有搜索结果的奶茶列表
-             * @param {string} keyword 搜索关键词
-             */
             async function renderDrinkListWithSearch(keyword) {
                 const trimmed = keyword.trim();
                 if (!trimmed) {
-                    // 如果关键词为空，回退到分类视图
                     searchResultBar.classList.remove('visible');
                     categoryTabs.classList.remove('hidden');
                     renderDrinkList(currentCategory);
                     return;
                 }
-
                 try {
-                    // 1. 从 IndexedDB 获取所有奶茶记录
                     const allRecords = await getAllDrinkRecords();
-
-                    // 2. 使用 Fuse.js 进行模糊搜索
                     const matched = fuseSearchDrinks(trimmed, allRecords);
-
-                    // 3. 按日期倒序排序（最新在前）
                     matched.sort((a, b) => {
                         if (a.date !== b.date) return b.date.localeCompare(a.date);
                         return (b.id || 0) - (a.id || 0);
                     });
-
-                    // 4. 显示搜索结果栏，隐藏分类标签
                     searchResultBar.classList.add('visible');
                     searchKeywordDisplay.textContent = trimmed;
                     searchResultCount.textContent = `共 ${matched.length} 条`;
                     categoryTabs.classList.add('hidden');
 
-                    // 5. 渲染列表
                     if (matched.length === 0) {
                         drinkList.innerHTML = `
                             <div class="drink-empty">
@@ -2084,7 +2067,6 @@
                         `;
                         return;
                     }
-
                     let html = '';
                     for (const r of matched) {
                         const stars = '⭐'.repeat(Math.min(r.rating || 0, 5)) +
@@ -2112,8 +2094,6 @@
                         `;
                     }
                     drinkList.innerHTML = html;
-
-                    // 绑定删除事件
                     drinkList.querySelectorAll('.drink-item-delete').forEach(btn => {
                         btn.addEventListener('click', async function(e) {
                             e.stopPropagation();
@@ -2122,18 +2102,104 @@
                             if (!confirm('确定要删除这条记录吗？')) return;
                             try {
                                 await deleteDrinkRecord(id);
-                                // 删除后刷新当前搜索结果
                                 await renderDrinkListWithSearch(window._searchKeyword.trim());
+                                if (mainPage.classList.contains('active')) {
+                                    updateDrinkCardStats();
+                                }
                             } catch (err) {
                                 alert('删除失败：' + err.message);
                             }
                         });
                     });
-
                 } catch (err) {
                     console.error('搜索渲染失败:', err);
                     drinkList.innerHTML = `<div class="drink-empty">⚠️ 搜索失败，请重试</div>`;
                 }
+            }
+
+            // ================================================================
+            //  ★ 数据卡片统计逻辑（核心新增）
+            // ================================================================
+
+            /**
+             * 更新奶茶卡片统计信息
+             * 统计本月记录数量，并找出本月评分最高的记录（品牌+名称）
+             */
+            async function updateDrinkCardStats() {
+                const descEl = document.getElementById('drinkStatsDesc');
+                if (!descEl) return;
+                try {
+                    const allRecords = await getAllDrinkRecords();
+                    const now = new Date();
+                    const currentMonth = now.getMonth();
+                    const currentYear = now.getFullYear();
+
+                    // 筛选本月记录
+                    const monthRecords = allRecords.filter(r => {
+                        const d = new Date(r.date);
+                        return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+                    });
+
+                    if (monthRecords.length === 0) {
+                        descEl.textContent = '本月还没喝过，去记录一杯吧 🧋';
+                        return;
+                    }
+
+                    // 找出评分最高的记录（若平局，取第一个）
+                    const best = monthRecords.reduce((a, b) => (a.rating > b.rating ? a : b));
+                    const favorite = `${best.brand || ''} ${best.name || ''}`.trim() || '未知';
+                    descEl.textContent = `本月喝了 ${monthRecords.length} 杯，最爱：${favorite}`;
+                } catch (e) {
+                    console.warn('更新奶茶卡片统计失败:', e);
+                    descEl.textContent = '加载数据失败';
+                }
+            }
+
+            /**
+             * 更新心情卡片统计信息
+             * 统计本周（周一至周日）的心情 emoji 出现频率，取最高频的
+             */
+            function updateMoodCardStats() {
+                const descEl = document.getElementById('moodStatsDesc');
+                if (!descEl) return;
+                const records = loadAllMoodRecords();
+
+                // 计算本周一和本周日
+                const now = new Date();
+                const dayOfWeek = now.getDay(); // 0=周日
+                const diffToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+                const monday = new Date(now);
+                monday.setDate(now.getDate() - diffToMonday);
+                monday.setHours(0, 0, 0, 0);
+                const sunday = new Date(monday);
+                sunday.setDate(monday.getDate() + 6);
+                sunday.setHours(23, 59, 59, 999);
+
+                const weekRecords = records.filter(r => {
+                    const d = new Date(r.date);
+                    return d >= monday && d <= sunday;
+                });
+
+                if (weekRecords.length === 0) {
+                    descEl.textContent = '本周还没记录心情';
+                    return;
+                }
+
+                // 统计各 emoji 出现次数
+                const freq = {};
+                weekRecords.forEach(r => {
+                    const emoji = r.emoji || '😐';
+                    freq[emoji] = (freq[emoji] || 0) + 1;
+                });
+                let maxEmoji = '😐';
+                let maxCount = 0;
+                for (const [emoji, count] of Object.entries(freq)) {
+                    if (count > maxCount) {
+                        maxCount = count;
+                        maxEmoji = emoji;
+                    }
+                }
+                descEl.textContent = `本周平均心情：${maxEmoji}`;
             }
 
             // ================================================================
@@ -2144,49 +2210,33 @@
 
             globalSearchInput.addEventListener('input', function() {
                 const val = this.value.trim();
-
-                // 清除之前的定时器
                 if (searchDebounceTimer) {
                     clearTimeout(searchDebounceTimer);
                     searchDebounceTimer = null;
                 }
-
-                // 如果输入为空，清除搜索状态（但不跳转）
                 if (val === '') {
                     window._searchKeyword = '';
-                    // 如果当前在奶茶页，则回到分类视图
                     if (drinkPage.classList.contains('active')) {
                         clearSearchState();
                         renderDrinkList(currentCategory);
                     }
                     return;
                 }
-
-                // 防抖 300ms 后执行搜索跳转
                 searchDebounceTimer = setTimeout(() => {
                     const keyword = globalSearchInput.value.trim();
                     if (keyword === '') return;
-
-                    // 保存搜索词到全局
                     window._searchKeyword = keyword;
-
-                    // 切换到奶茶记录页
                     showPage('drinkPage');
-
-                    // 在奶茶页渲染搜索结果
                     renderDrinkListWithSearch(keyword);
-
                     searchDebounceTimer = null;
                 }, 300);
             });
 
-            // 回车键直接触发搜索（跳过防抖）
             globalSearchInput.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
                     const val = this.value.trim();
                     if (val === '') return;
-                    // 清除防抖定时器
                     if (searchDebounceTimer) {
                         clearTimeout(searchDebounceTimer);
                         searchDebounceTimer = null;
@@ -2263,7 +2313,6 @@
                 };
                 try {
                     await addDrinkRecord(record);
-                    // 保存后刷新：如果有搜索词则刷新搜索结果，否则刷新分类列表
                     if (window._searchKeyword && window._searchKeyword.trim() !== '') {
                         await renderDrinkListWithSearch(window._searchKeyword.trim());
                     } else {
@@ -2272,6 +2321,10 @@
                     clearDrinkForm();
                     drinkSaveBtn.textContent = '✅ 已保存';
                     setTimeout(() => { drinkSaveBtn.textContent = '保存'; }, 1200);
+                    // 更新主页卡片
+                    if (mainPage.classList.contains('active')) {
+                        updateDrinkCardStats();
+                    }
                 } catch (err) {
                     alert('保存失败：' + err.message);
                 }
@@ -2290,6 +2343,10 @@
                 try {
                     await migrateDrinkDataFromLocalStorage();
                     await renderDrinkList(currentCategory);
+                    // 更新主页卡片（如果主页可见）
+                    if (mainPage.classList.contains('active')) {
+                        updateDrinkCardStats();
+                    }
                     console.log('🧋 奶茶记录已初始化 (IndexedDB + Fuse.js)');
                 } catch (err) {
                     console.error('奶茶模块初始化失败:', err);
@@ -2297,9 +2354,12 @@
                 }
             }
 
+            // 加载心情并更新卡片
             loadAndRenderMood();
+            // 初始化奶茶模块
             initDrinkModule();
 
+            // 监听可见性变化刷新数据
             document.addEventListener('visibilitychange', function() {
                 if (!document.hidden) {
                     updateClockAndGreeting();
@@ -2311,10 +2371,15 @@
                             renderDrinkList(currentCategory);
                         }
                     }
-                    updateMoodPreviewBadge();
+                    if (mainPage.classList.contains('active')) {
+                        updateDrinkCardStats();
+                        updateMoodCardStats();
+                        updateMoodPreviewBadge();
+                    }
                 }
             });
 
+            // DOM 就绪后初始化
             document.addEventListener('DOMContentLoaded', function() {
                 if (!startPage.classList.contains('active') &&
                     !mainPage.classList.contains('active') &&
@@ -2336,10 +2401,14 @@
                     }
                 }
                 if (moodPage.classList.contains('active')) loadAndRenderMood();
-                updateMoodPreviewBadge();
+                if (mainPage.classList.contains('active')) {
+                    updateDrinkCardStats();
+                    updateMoodCardStats();
+                    updateMoodPreviewBadge();
+                }
             });
 
-            console.log('✨ Eyre 工作台已加载 (Fuse.js 模糊搜索已集成) ✨');
+            console.log('✨ Eyre 工作台已加载 (数据卡片升级完成) ✨');
 
         })();
     </script>
