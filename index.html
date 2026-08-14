@@ -4,21 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
     <title>Eyre 工作台</title>
-
-    <!-- ===== 引入 Fuse.js (模糊搜索库) ===== -->
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js">
     </script>
-
     <style>
-        /* ============================================================
-                   全局重置 & 基础
-                   ============================================================ */
+        /* ===== 全局重置 & 基础 ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             min-height: 100vh;
             font-family: 'Segoe UI', 'PingFang SC', Roboto, system-ui, -apple-system, sans-serif;
@@ -30,10 +24,6 @@
             position: relative;
             overflow-x: hidden;
         }
-
-        /* ============================================================
-                   页面容器（切换用）
-                   ============================================================ */
         .page {
             position: absolute;
             top: 0;
@@ -50,16 +40,12 @@
             will-change: opacity, visibility;
             z-index: 1;
         }
-
         .page.active {
             opacity: 1;
             visibility: visible;
             z-index: 10;
         }
-
-        /* ============================================================
-                   启动页
-                   ============================================================ */
+        /* 启动页 */
         #startPage .start-content {
             display: flex;
             flex-direction: column;
@@ -68,7 +54,6 @@
             max-width: 520px;
             padding: 1.2rem;
         }
-
         .hello-btn {
             background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(12px);
@@ -80,8 +65,7 @@
             font-weight: 600;
             color: #1e3a2a;
             letter-spacing: 0.04em;
-            box-shadow: 0 20px 40px -12px rgba(30, 60, 40, 0.25),
-                inset 0 1px 2px rgba(255, 255, 255, 0.8);
+            box-shadow: 0 20px 40px -12px rgba(30, 60, 40, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.8);
             cursor: pointer;
             transition: transform 0.25s ease, box-shadow 0.3s ease, background 0.3s ease;
             user-select: none;
@@ -89,18 +73,15 @@
             min-width: 200px;
             min-height: 70px;
         }
-
         .hello-btn:hover {
             transform: scale(1.03) translateY(-2px);
             box-shadow: 0 28px 48px -14px rgba(30, 60, 40, 0.35);
             background: rgba(255, 255, 255, 0.65);
         }
-
         .hello-btn:active {
             transform: scale(0.96);
             transition-duration: 0.08s;
         }
-
         .start-slogan {
             margin-top: 2.2rem;
             font-size: clamp(1.2rem, 4vw, 1.8rem);
@@ -117,7 +98,6 @@
             animation: floatSlogan 4s ease-in-out infinite;
             line-height: 1.5;
         }
-
         @keyframes floatSlogan {
             0%,
             100% {
@@ -127,16 +107,12 @@
                 transform: translateY(-6px);
             }
         }
-
-        /* ============================================================
-                   工作台主页
-                   ============================================================ */
+        /* 工作台主页 */
         #mainPage {
             align-items: flex-start;
             padding-top: 2.2rem;
             padding-bottom: 2.8rem;
         }
-
         .main-container {
             width: 100%;
             max-width: 680px;
@@ -145,8 +121,6 @@
             flex-direction: column;
             gap: 1.6rem;
         }
-
-        /* ——— 顶部栏 ——— */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -155,8 +129,6 @@
             gap: 0.6rem 1rem;
             padding: 0.2rem 0.2rem 0.4rem 0.2rem;
         }
-
-        /* —— 返回链接（毛玻璃胶囊） —— */
         .back-link {
             font-size: clamp(0.95rem, 2.5vw, 1.2rem);
             color: #1f4a2d;
@@ -176,7 +148,6 @@
             white-space: nowrap;
             min-height: 44px;
         }
-
         .back-link:hover {
             background: rgba(255, 255, 255, 0.55);
             transform: translateX(-2px);
@@ -184,8 +155,6 @@
         .back-link:active {
             transform: scale(0.94);
         }
-
-        /* —— 日期时间组 —— */
         .datetime-group {
             text-align: right;
             background: rgba(255, 255, 255, 0.3);
@@ -197,7 +166,6 @@
             box-shadow: 0 2px 12px rgba(0, 30, 0, 0.06);
             min-width: 140px;
         }
-
         .date-display {
             font-size: clamp(0.85rem, 2.2vw, 1.1rem);
             color: #1e3a2a;
@@ -206,7 +174,6 @@
             opacity: 0.85;
             line-height: 1.4;
         }
-
         .time-display {
             font-size: clamp(2rem, 6.5vw, 3.2rem);
             font-weight: 600;
@@ -216,7 +183,6 @@
             line-height: 1.2;
             margin-top: 0.1rem;
         }
-
         .greeting-display {
             font-size: clamp(1rem, 2.8vw, 1.45rem);
             font-weight: 500;
@@ -225,13 +191,11 @@
             opacity: 0.9;
             margin-top: 0.1rem;
         }
-
         .day-divider {
             border-top: 1px solid rgba(30, 60, 40, 0.12);
             margin: 0.4rem 0 0.3rem 0;
             width: 100%;
         }
-
         .day-count {
             font-size: clamp(0.65rem, 1.5vw, 0.85rem);
             color: rgba(30, 60, 40, 0.5);
@@ -242,7 +206,6 @@
             gap: 0.3rem;
             margin-top: 0.1rem;
         }
-
         .day-icon {
             font-size: clamp(0.65rem, 1.4vw, 0.8rem);
         }
@@ -251,15 +214,11 @@
             font-weight: 700;
             font-size: clamp(0.75rem, 1.7vw, 0.95rem);
         }
-
-        /* ============================================================
-                   ★ 全局搜索框
-                   ============================================================ */
+        /* 全局搜索框 */
         .search-container {
             width: 100%;
             padding: 0 0.2rem;
         }
-
         .global-search-input {
             width: 100%;
             padding: 0.75rem 1.4rem;
@@ -277,31 +236,24 @@
             box-sizing: border-box;
             box-shadow: 0 4px 14px rgba(0, 30, 0, 0.04);
         }
-
         .global-search-input::placeholder {
             color: #5a7a6a;
             opacity: 0.55;
             font-weight: 300;
             letter-spacing: 0.02em;
         }
-
         .global-search-input:focus {
             border-color: #3a9e5a;
             background: rgba(255, 255, 255, 0.7);
             box-shadow: 0 0 0 5px rgba(60, 160, 80, 0.13), 0 6px 20px rgba(0, 30, 0, 0.06);
         }
-
-        /* ============================================================
-                   卡片网格（全站统一卡片）
-                   ============================================================ */
+        /* 卡片网格 */
         .cards-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 1.2rem;
             margin-top: 0.2rem;
         }
-
-        /* —— 统一卡片样式 —— */
         .card {
             background: rgba(255, 255, 255, 0.55);
             backdrop-filter: blur(10px);
@@ -319,34 +271,29 @@
             justify-content: center;
             align-items: center;
         }
-
         .card:hover {
             transform: translateY(-4px);
             box-shadow: 0 16px 36px rgba(0, 30, 0, 0.12);
             background: rgba(255, 255, 255, 0.7);
         }
-
-        /* 可点击卡片 */
         #drinkCard,
         #moodCard,
-        #briefCard {
+        #briefCard,
+        #hobbyCard {
             cursor: pointer;
         }
-
         .card-emoji {
             font-size: clamp(2.6rem, 6vw, 3.6rem);
             line-height: 1.2;
             margin-bottom: 0.3rem;
             transition: transform 0.3s ease;
         }
-
         .card-title {
             font-size: clamp(1.1rem, 2.8vw, 1.5rem);
             font-weight: 600;
             color: #1b3a22;
             letter-spacing: 0.03em;
         }
-
         .card-desc {
             font-size: clamp(0.7rem, 1.8vw, 0.9rem);
             color: #2d5a3d;
@@ -357,33 +304,27 @@
             min-height: 1.4em;
             transition: opacity 0.3s ease;
         }
-
         .card-desc.placeholder {
             opacity: 0.45;
         }
-
         .card-text-group {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-
-        /* —— 心情卡片专用：两个描述文字切换 —— */
+        /* 心情卡片悬停效果 */
         .desc-hover {
             display: none;
         }
-
         #moodCard:hover .desc-default {
             display: none;
         }
         #moodCard:hover .desc-hover {
             display: inline;
         }
-
         #moodCard:hover .card-emoji {
             animation: moodFloat 0.8s ease-in-out infinite alternate;
         }
-
         @keyframes moodFloat {
             0% {
                 transform: translateY(0px) rotate(0deg) scale(1);
@@ -392,8 +333,6 @@
                 transform: translateY(-10px) rotate(6deg) scale(1.10);
             }
         }
-
-        /* —— 心情预览徽标 —— */
         .mood-preview-badge {
             display: inline-block;
             margin-top: 0.4rem;
@@ -412,14 +351,12 @@
             justify-content: center;
             transition: all 0.2s ease;
         }
-
         .mood-preview-badge .preview-emoji {
             line-height: 1;
         }
         .mood-preview-badge .preview-text {
             display: none;
         }
-
         .mood-preview-badge.empty-preview {
             opacity: 0.4;
             font-size: clamp(1rem, 2.5vw, 1.4rem);
@@ -427,10 +364,7 @@
         .mood-preview-badge.empty-preview .preview-emoji {
             opacity: 0.6;
         }
-
-        /* ============================================================
-                   统一按钮系统
-                   ============================================================ */
+        /* 统一按钮 */
         .btn-primary {
             display: inline-flex;
             align-items: center;
@@ -454,7 +388,6 @@
             text-align: center;
             user-select: none;
         }
-
         .btn-primary:hover {
             background: rgba(50, 140, 80, 0.9);
             transform: scale(1.01);
@@ -470,7 +403,6 @@
             transform: none !important;
             box-shadow: none !important;
         }
-
         .btn-secondary {
             display: inline-flex;
             align-items: center;
@@ -494,7 +426,6 @@
             text-align: center;
             user-select: none;
         }
-
         .btn-secondary:hover {
             background: rgba(180, 180, 180, 0.55);
             transform: scale(1.01);
@@ -504,10 +435,7 @@
             transform: scale(0.96);
             transition-duration: 0.08s;
         }
-
-        /* ============================================================
-                   统一输入框系统
-                   ============================================================ */
+        /* 统一输入框 */
         .input-field {
             width: 100%;
             padding: 0.6rem 1.2rem;
@@ -524,19 +452,16 @@
             transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
             box-sizing: border-box;
         }
-
         .input-field::placeholder {
             color: #5a7a6a;
             opacity: 0.5;
             font-weight: 300;
         }
-
         .input-field:focus {
             border-color: #4c8b5a;
             box-shadow: 0 0 0 4px rgba(60, 140, 80, 0.10);
             background: rgba(255, 255, 255, 0.8);
         }
-
         select.input-field {
             appearance: none;
             -webkit-appearance: none;
@@ -555,10 +480,7 @@
             padding-right: 0.8rem;
             min-height: 44px;
         }
-
-        /* ============================================================
-                   文字层级统一
-                   ============================================================ */
+        /* 文字层级 */
         .text-title {
             font-size: clamp(1.1rem, 2.8vw, 1.5rem);
             font-weight: 600;
@@ -576,16 +498,12 @@
             opacity: 0.65;
             letter-spacing: 0.02em;
         }
-
-        /* ============================================================
-                   奶茶记录页 (IndexedDB)
-                   ============================================================ */
+        /* 奶茶页 */
         #drinkPage {
             align-items: flex-start;
             padding-top: 1.8rem;
             padding-bottom: 2.8rem;
         }
-
         .drink-container {
             width: 100%;
             max-width: 680px;
@@ -594,25 +512,21 @@
             flex-direction: column;
             gap: 1.2rem;
         }
-
         .drink-top-bar {
             display: flex;
             align-items: center;
             gap: 1rem;
             padding: 0 0.2rem;
         }
-
         .drink-back {
             flex-shrink: 0;
         }
-
         .drink-title {
             font-size: clamp(1.1rem, 2.8vw, 1.5rem);
             font-weight: 600;
             color: #1b3a22;
             letter-spacing: 0.04em;
         }
-
         .category-tabs {
             display: flex;
             gap: 0.5rem;
@@ -625,11 +539,9 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
-
         .category-tabs.hidden {
             display: none;
         }
-
         .category-tab {
             flex: 1;
             min-width: 56px;
@@ -647,7 +559,6 @@
             font-family: inherit;
             user-select: none;
         }
-
         .category-tab:hover {
             opacity: 0.85;
             background: rgba(255, 255, 255, 0.2);
@@ -659,7 +570,6 @@
             -webkit-backdrop-filter: blur(4px);
             box-shadow: 0 2px 8px rgba(0, 30, 0, 0.06);
         }
-
         .search-result-bar {
             display: none;
             align-items: center;
@@ -675,18 +585,15 @@
             box-shadow: 0 2px 12px rgba(0, 30, 0, 0.04);
             min-height: 52px;
         }
-
         .search-result-bar.visible {
             display: flex;
         }
-
         .search-result-text {
             font-size: clamp(0.95rem, 2.4vw, 1.15rem);
             font-weight: 500;
             color: #1b3a22;
             letter-spacing: 0.02em;
         }
-
         .search-result-text .highlight {
             color: #2e7d32;
             font-weight: 600;
@@ -694,7 +601,6 @@
             padding: 0.1rem 0.6rem;
             border-radius: 20px;
         }
-
         .search-result-count {
             font-size: clamp(0.75rem, 1.8vw, 0.9rem);
             color: #2d5a3d;
@@ -702,7 +608,6 @@
             margin-left: 0.3rem;
             font-weight: 400;
         }
-
         .search-result-bar .btn-secondary {
             width: auto;
             min-width: 100px;
@@ -711,7 +616,6 @@
             font-size: clamp(0.8rem, 1.8vw, 0.95rem);
             flex-shrink: 0;
         }
-
         .drink-list {
             background: rgba(255, 255, 255, 0.35);
             backdrop-filter: blur(10px);
@@ -724,7 +628,6 @@
             overflow-y: auto;
             box-shadow: 0 4px 16px rgba(0, 30, 0, 0.05);
         }
-
         .drink-list::-webkit-scrollbar {
             width: 4px;
         }
@@ -735,7 +638,6 @@
         .drink-list::-webkit-scrollbar-track {
             background: transparent;
         }
-
         .drink-item-card {
             background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(4px);
@@ -749,33 +651,28 @@
             flex-direction: column;
             gap: 0.3rem;
         }
-
         .drink-item-card:last-child {
             margin-bottom: 0;
         }
         .drink-item-card:hover {
             background: rgba(255, 255, 255, 0.7);
         }
-
         .drink-item-row {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             gap: 0.3rem 0.6rem;
         }
-
         .drink-item-brand {
             font-weight: 600;
             color: #1b3a22;
             font-size: clamp(0.95rem, 2.2vw, 1.1rem);
         }
-
         .drink-item-name {
             font-weight: 500;
             color: #2d5a3d;
             font-size: clamp(0.9rem, 2vw, 1.05rem);
         }
-
         .drink-item-category-tag {
             display: inline-block;
             padding: 0.05rem 0.7rem;
@@ -787,14 +684,12 @@
             border: 1px solid rgba(60, 140, 80, 0.08);
             flex-shrink: 0;
         }
-
         .drink-item-stars {
             color: #f5b342;
             font-size: clamp(0.75rem, 1.8vw, 0.95rem);
             letter-spacing: 0.5px;
             flex-shrink: 0;
         }
-
         .drink-item-note {
             font-size: clamp(0.75rem, 1.6vw, 0.88rem);
             color: #3d6a4d;
@@ -806,14 +701,12 @@
         .drink-item-note:empty {
             display: none;
         }
-
         .drink-item-date {
             font-size: clamp(0.6rem, 1.2vw, 0.7rem);
             color: rgba(30, 60, 40, 0.4);
             flex-shrink: 0;
             margin-left: auto;
         }
-
         .drink-item-delete {
             background: rgba(200, 80, 80, 0.15);
             border: none;
@@ -828,7 +721,6 @@
             flex-shrink: 0;
             line-height: 1.6;
         }
-
         .drink-item-delete:hover {
             background: rgba(200, 80, 80, 0.3);
             transform: scale(1.02);
@@ -836,7 +728,6 @@
         .drink-item-delete:active {
             transform: scale(0.92);
         }
-
         .drink-empty {
             text-align: center;
             color: rgba(30, 60, 40, 0.35);
@@ -844,7 +735,6 @@
             padding: 1.8rem 0;
             font-weight: 300;
         }
-
         .drink-form {
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(10px);
@@ -854,7 +744,6 @@
             border: 1px solid rgba(255, 255, 255, 0.5);
             box-shadow: 0 4px 16px rgba(0, 30, 0, 0.05);
         }
-
         .drink-form-title {
             font-size: clamp(0.9rem, 2vw, 1.1rem);
             font-weight: 500;
@@ -862,7 +751,6 @@
             margin-bottom: 0.8rem;
             opacity: 0.7;
         }
-
         .drink-form .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -871,14 +759,12 @@
         .drink-form .form-grid .full-width {
             grid-column: 1 / -1;
         }
-
         .star-rating {
             display: flex;
             gap: 0.2rem;
             align-items: center;
             padding: 0.2rem 0;
         }
-
         .star-rating .star {
             font-size: clamp(1.4rem, 3.5vw, 2rem);
             color: #d0d0d0;
@@ -896,7 +782,6 @@
         .star-rating .star.active:hover {
             transform: scale(1.15);
         }
-
         .drink-form .form-actions {
             display: flex;
             gap: 0.6rem;
@@ -906,16 +791,12 @@
         .drink-form .form-actions .btn-secondary {
             flex: 1;
         }
-
-        /* ============================================================
-                   心情详情页
-                   ============================================================ */
+        /* 心情页 */
         #moodPage {
             align-items: flex-start;
             padding-top: 1.8rem;
             padding-bottom: 2.8rem;
         }
-
         .mood-container {
             width: 100%;
             max-width: 680px;
@@ -924,25 +805,21 @@
             flex-direction: column;
             gap: 1.2rem;
         }
-
         .mood-top-bar {
             display: flex;
             align-items: center;
             gap: 1rem;
             padding: 0 0.2rem;
         }
-
         .mood-back {
             flex-shrink: 0;
         }
-
         .mood-title {
             font-size: clamp(1.1rem, 2.8vw, 1.5rem);
             font-weight: 600;
             color: #1b3a22;
             letter-spacing: 0.04em;
         }
-
         .mood-input-card {
             background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(10px);
@@ -952,7 +829,6 @@
             border: 1px solid rgba(255, 255, 255, 0.5);
             box-shadow: 0 4px 16px rgba(0, 30, 0, 0.05);
         }
-
         .mood-input-title {
             font-size: clamp(0.9rem, 2vw, 1.1rem);
             font-weight: 500;
@@ -963,7 +839,6 @@
         .mood-input-card .input-field {
             margin-bottom: 0.8rem;
         }
-
         .mood-emoji-selector {
             display: flex;
             flex-wrap: wrap;
@@ -971,7 +846,6 @@
             gap: 0.4rem 0.6rem;
             margin-bottom: 1rem;
         }
-
         .mood-emoji-label {
             font-size: clamp(0.85rem, 1.8vw, 1rem);
             color: #2d5a3d;
@@ -979,13 +853,11 @@
             font-weight: 400;
             margin-right: 0.2rem;
         }
-
         .mood-emoji-options {
             display: flex;
             gap: 0.3rem;
             flex-wrap: wrap;
         }
-
         .mood-emoji-option {
             font-size: clamp(1.8rem, 4.5vw, 2.6rem);
             cursor: pointer;
@@ -998,7 +870,6 @@
             filter: grayscale(0.6);
             transform: scale(0.9);
         }
-
         .mood-emoji-option:hover {
             transform: scale(1.15);
             opacity: 0.8;
@@ -1013,7 +884,6 @@
             border-radius: 16px;
             padding: 0.1rem 0.3rem;
         }
-
         .mood-today-display {
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(10px);
@@ -1024,7 +894,6 @@
             box-shadow: 0 4px 16px rgba(0, 30, 0, 0.05);
             min-height: 80px;
         }
-
         .mood-today-label {
             font-size: clamp(0.8rem, 1.8vw, 0.95rem);
             font-weight: 500;
@@ -1033,7 +902,6 @@
             margin-bottom: 0.4rem;
             letter-spacing: 0.04em;
         }
-
         .mood-today-content {
             font-size: clamp(1rem, 2.6vw, 1.3rem);
             color: #1b3a22;
@@ -1045,7 +913,6 @@
             word-break: break-word;
             line-height: 1.5;
         }
-
         .mood-today-content .empty-hint {
             color: #5a7a6a;
             opacity: 0.4;
@@ -1059,7 +926,6 @@
         .mood-today-content .today-text {
             font-weight: 450;
         }
-
         .mood-history-section {
             background: rgba(255, 255, 255, 0.35);
             backdrop-filter: blur(10px);
@@ -1071,7 +937,6 @@
             max-height: 300px;
             overflow-y: auto;
         }
-
         .mood-history-section::-webkit-scrollbar {
             width: 4px;
         }
@@ -1082,7 +947,6 @@
         .mood-history-section::-webkit-scrollbar-track {
             background: transparent;
         }
-
         .mood-history-title {
             font-size: clamp(0.85rem, 2vw, 1rem);
             font-weight: 500;
@@ -1091,13 +955,11 @@
             margin-bottom: 0.6rem;
             letter-spacing: 0.04em;
         }
-
         .mood-history-list {
             display: flex;
             flex-direction: column;
             gap: 0.1rem;
         }
-
         .mood-history-item {
             display: flex;
             align-items: center;
@@ -1110,7 +972,6 @@
         .mood-history-item:last-child {
             border-bottom: none;
         }
-
         .mood-history-item .h-date {
             font-size: clamp(0.65rem, 1.4vw, 0.8rem);
             color: rgba(30, 60, 40, 0.4);
@@ -1126,7 +987,6 @@
             font-weight: 400;
             word-break: break-word;
         }
-
         .mood-history-empty {
             text-align: center;
             color: rgba(30, 60, 40, 0.35);
@@ -1134,16 +994,12 @@
             padding: 1.2rem 0;
             font-weight: 300;
         }
-
-        /* ============================================================
-                   ★ 商情简报页
-                   ============================================================ */
+        /* 商情简报页 */
         #briefPage {
             align-items: flex-start;
             padding-top: 1.8rem;
             padding-bottom: 2.8rem;
         }
-
         .brief-container {
             width: 100%;
             max-width: 680px;
@@ -1152,25 +1008,21 @@
             flex-direction: column;
             gap: 1.2rem;
         }
-
         .brief-top-bar {
             display: flex;
             align-items: center;
             gap: 1rem;
             padding: 0 0.2rem;
         }
-
         .brief-back {
             flex-shrink: 0;
         }
-
         .brief-title {
             font-size: clamp(1.1rem, 2.8vw, 1.5rem);
             font-weight: 600;
             color: #1b3a22;
             letter-spacing: 0.04em;
         }
-
         .brief-generate-btn {
             width: 100%;
             padding: 0.8rem 1.4rem;
@@ -1191,7 +1043,6 @@
             text-align: center;
             user-select: none;
         }
-
         .brief-generate-btn:hover:not(:disabled) {
             background: rgba(50, 160, 80, 0.90);
             transform: scale(1.01);
@@ -1207,7 +1058,6 @@
             transform: none !important;
             box-shadow: none !important;
         }
-
         .brief-content-card {
             background: rgba(255, 255, 255, 0.40);
             backdrop-filter: blur(12px);
@@ -1226,7 +1076,6 @@
             color: #1b3a22;
             font-family: inherit;
         }
-
         .brief-content-card::-webkit-scrollbar {
             width: 4px;
         }
@@ -1237,7 +1086,6 @@
         .brief-content-card::-webkit-scrollbar-track {
             background: transparent;
         }
-
         .brief-content-card .empty-hint {
             color: #5a7a6a;
             opacity: 0.45;
@@ -1250,14 +1098,12 @@
             min-height: 140px;
             white-space: normal;
         }
-
         .brief-content-card .error-hint {
             color: #c0392b;
             opacity: 0.8;
             font-weight: 400;
             white-space: normal;
         }
-
         .brief-meta {
             font-size: clamp(0.7rem, 1.6vw, 0.85rem);
             color: rgba(30, 60, 40, 0.4);
@@ -1267,10 +1113,318 @@
             margin-top: 0.4rem;
             letter-spacing: 0.02em;
         }
-
-        /* ============================================================
-                   响应式：手机端优化 (≤500px)
-                   ============================================================ */
+        /* 兴趣爱好页 */
+        #hobbyPage {
+            align-items: flex-start;
+            padding-top: 1.8rem;
+            padding-bottom: 2.8rem;
+        }
+        .hobby-container {
+            width: 100%;
+            max-width: 680px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .hobby-top-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0 0.2rem;
+        }
+        .hobby-back {
+            flex-shrink: 0;
+        }
+        .hobby-title {
+            font-size: clamp(1.1rem, 2.8vw, 1.5rem);
+            font-weight: 600;
+            color: #1b3a22;
+            letter-spacing: 0.04em;
+        }
+        .hobby-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 0.5rem 0.8rem;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .hobby-tab {
+            flex: 1;
+            min-width: 56px;
+            padding: 0.5rem 0.6rem;
+            min-height: 44px;
+            border: none;
+            border-radius: 30px;
+            background: transparent;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            font-weight: 500;
+            color: #1e3a2a;
+            opacity: 0.6;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            user-select: none;
+        }
+        .hobby-tab:hover {
+            opacity: 0.85;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .hobby-tab.active {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            box-shadow: 0 2px 8px rgba(0, 30, 0, 0.06);
+        }
+        .hobby-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .hobby-list {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 1rem 1rem 0.6rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            min-height: 100px;
+            max-height: 320px;
+            overflow-y: auto;
+            box-shadow: 0 4px 16px rgba(0, 30, 0, 0.05);
+        }
+        .hobby-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .hobby-list::-webkit-scrollbar-thumb {
+            background: rgba(60, 120, 80, 0.25);
+            border-radius: 10px;
+        }
+        .hobby-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .hobby-item-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 20px;
+            padding: 0.7rem 1rem;
+            margin-bottom: 0.6rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: background 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+        .hobby-item-card:last-child {
+            margin-bottom: 0;
+        }
+        .hobby-item-card:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+        .hobby-item-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.3rem 0.6rem;
+        }
+        .hobby-item-title {
+            font-weight: 600;
+            color: #1b3a22;
+            font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+        }
+        .hobby-item-meta {
+            font-size: clamp(0.75rem, 1.6vw, 0.88rem);
+            color: #2d5a3d;
+            opacity: 0.7;
+        }
+        .hobby-item-delete {
+            background: rgba(200, 80, 80, 0.15);
+            border: none;
+            border-radius: 30px;
+            padding: 0.1rem 0.6rem;
+            min-height: 30px;
+            font-size: clamp(0.7rem, 1.6vw, 0.85rem);
+            color: #a05050;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            font-family: inherit;
+            flex-shrink: 0;
+            line-height: 1.6;
+            margin-left: auto;
+        }
+        .hobby-item-delete:hover {
+            background: rgba(200, 80, 80, 0.3);
+            transform: scale(1.02);
+        }
+        .hobby-item-delete:active {
+            transform: scale(0.92);
+        }
+        .hobby-empty {
+            text-align: center;
+            color: rgba(30, 60, 40, 0.35);
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
+            padding: 1.8rem 0;
+            font-weight: 300;
+        }
+        .hobby-form {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 1.2rem 1.4rem 1.4rem 1.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 16px rgba(0, 30, 0, 0.05);
+        }
+        .hobby-form-title {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            font-weight: 500;
+            color: #1b3a22;
+            margin-bottom: 0.8rem;
+            opacity: 0.7;
+        }
+        .hobby-form .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+        }
+        .hobby-form .form-grid .full-width {
+            grid-column: 1 / -1;
+        }
+        .hobby-form .form-actions {
+            display: flex;
+            gap: 0.6rem;
+            margin-top: 0.6rem;
+        }
+        .hobby-form .form-actions .btn-primary,
+        .hobby-form .form-actions .btn-secondary {
+            flex: 1;
+        }
+        .star-rating-small {
+            display: flex;
+            gap: 0.1rem;
+            align-items: center;
+        }
+        .star-rating-small .star {
+            font-size: clamp(1.2rem, 2.8vw, 1.6rem);
+            color: #d0d0d0;
+            cursor: pointer;
+            transition: color 0.15s;
+            user-select: none;
+            line-height: 1;
+        }
+        .star-rating-small .star.active {
+            color: #f5b342;
+        }
+        /* 筛选下拉 */
+        .filter-select {
+            margin-left: 0.5rem;
+            min-width: 100px;
+        }
+        /* 搜索结果页 */
+        #searchResultPage {
+            align-items: flex-start;
+            padding-top: 1.8rem;
+            padding-bottom: 2.8rem;
+        }
+        .search-result-container {
+            width: 100%;
+            max-width: 680px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .search-result-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0 0.2rem;
+        }
+        .search-result-title {
+            font-size: clamp(1.1rem, 2.8vw, 1.5rem);
+            font-weight: 600;
+            color: #1b3a22;
+            letter-spacing: 0.04em;
+        }
+        .search-result-summary {
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            color: #2d5a3d;
+            opacity: 0.6;
+            padding: 0 0.2rem;
+        }
+        .search-result-groups {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .search-result-group {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 1rem 1rem 0.6rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 16px rgba(0, 30, 0, 0.05);
+        }
+        .search-result-group-title {
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
+            font-weight: 600;
+            color: #1b3a22;
+            opacity: 0.7;
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.04em;
+        }
+        .search-result-item {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.3rem 0.6rem;
+            padding: 0.4rem 0.3rem;
+            border-bottom: 1px solid rgba(60, 120, 80, 0.06);
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
+            color: #1b3a22;
+        }
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        .search-result-item .s-title {
+            font-weight: 500;
+            flex: 1;
+        }
+        .search-result-item .s-meta {
+            opacity: 0.6;
+            font-size: clamp(0.7rem, 1.6vw, 0.85rem);
+        }
+        .search-result-item .s-delete {
+            background: rgba(200, 80, 80, 0.12);
+            border: none;
+            border-radius: 30px;
+            padding: 0.05rem 0.6rem;
+            min-height: 28px;
+            font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+            color: #a05050;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: inherit;
+            flex-shrink: 0;
+        }
+        .search-result-item .s-delete:hover {
+            background: rgba(200, 80, 80, 0.25);
+        }
+        .search-result-empty {
+            text-align: center;
+            color: rgba(30, 60, 40, 0.35);
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
+            padding: 2rem 0;
+            font-weight: 300;
+        }
+        /* 响应式 */
         @media (max-width: 500px) {
             .page {
                 padding: 1rem 0.8rem;
@@ -1281,11 +1435,12 @@
             }
             #drinkPage,
             #moodPage,
-            #briefPage {
+            #briefPage,
+            #hobbyPage,
+            #searchResultPage {
                 padding-top: 1rem;
                 padding-bottom: 1.8rem;
             }
-
             .top-bar {
                 flex-direction: column;
                 align-items: stretch;
@@ -1302,13 +1457,11 @@
             .time-display {
                 font-size: clamp(1.8rem, 5.5vw, 2.6rem);
             }
-
             .global-search-input {
                 padding: 0.6rem 1.2rem;
                 min-height: 46px;
                 font-size: clamp(0.85rem, 2.2vw, 1rem);
             }
-
             .cards-row {
                 grid-template-columns: 1fr 1fr;
                 gap: 0.8rem;
@@ -1317,7 +1470,6 @@
                 min-height: 120px;
                 padding: 1.2rem 0.6rem;
             }
-
             .drink-form .form-grid {
                 grid-template-columns: 1fr;
             }
@@ -1327,7 +1479,6 @@
             .drink-form .form-actions {
                 flex-direction: column;
             }
-
             .drink-list {
                 max-height: 280px;
                 padding: 0.8rem 0.8rem 0.4rem 0.8rem;
@@ -1335,7 +1486,6 @@
             .drink-item-card {
                 padding: 0.6rem 0.8rem;
             }
-
             .mood-history-item .h-date {
                 min-width: 60px;
                 font-size: clamp(0.6rem, 1.2vw, 0.7rem);
@@ -1343,7 +1493,6 @@
             .mood-emoji-option {
                 font-size: clamp(1.6rem, 5vw, 2.2rem);
             }
-
             .search-result-bar {
                 padding: 0.5rem 1rem 0.5rem 1.2rem;
                 flex-direction: column;
@@ -1354,7 +1503,6 @@
                 width: 100%;
                 min-width: unset;
             }
-
             .brief-content-card {
                 padding: 1.2rem 1rem 1.4rem 1rem;
                 max-height: 400px;
@@ -1366,11 +1514,34 @@
                 min-height: 46px;
                 font-size: clamp(0.9rem, 2.4vw, 1rem);
             }
+            .hobby-form .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .hobby-form .form-grid .full-width {
+                grid-column: 1;
+            }
+            .hobby-form .form-actions {
+                flex-direction: column;
+            }
+            .hobby-list {
+                max-height: 240px;
+                padding: 0.8rem 0.8rem 0.4rem 0.8rem;
+            }
+            .hobby-item-card {
+                padding: 0.6rem 0.8rem;
+            }
+            .search-result-group {
+                padding: 0.8rem 0.8rem 0.4rem 0.8rem;
+            }
+            .search-result-item {
+                padding: 0.3rem 0.2rem;
+                font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+            }
+            .filter-select {
+                min-width: 80px;
+                font-size: 0.8rem;
+            }
         }
-
-        /* ============================================================
-                   响应式：超小屏 (≤380px) → 卡片 1 列
-                   ============================================================ */
         @media (max-width: 380px) {
             .cards-row {
                 grid-template-columns: 1fr;
@@ -1424,11 +1595,28 @@
                 padding: 0.5rem 0.8rem;
                 min-height: 42px;
             }
+            .hobby-tab {
+                font-size: clamp(0.7rem, 1.8vw, 0.8rem);
+                padding: 0.4rem 0.4rem;
+                min-height: 36px;
+            }
+            .hobby-list {
+                max-height: 200px;
+            }
+            .hobby-item-title {
+                font-size: 0.85rem;
+            }
+            .hobby-item-meta {
+                font-size: 0.7rem;
+            }
+            .search-result-item {
+                font-size: clamp(0.75rem, 1.6vw, 0.85rem);
+            }
+            .filter-select {
+                min-width: 70px;
+                font-size: 0.7rem;
+            }
         }
-
-        /* ============================================================
-                   工具类
-                   ============================================================ */
         .hidden {
             display: none !important;
         }
@@ -1436,9 +1624,7 @@
 </head>
 <body>
 
-    <!-- ============================================================
-    启动页
-    ============================================================ -->
+    <!-- ===== 启动页 ===== -->
     <div id="startPage" class="page active">
         <div class="start-content">
             <button class="hello-btn" id="helloBtn">Hello Eyre</button>
@@ -1446,12 +1632,9 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    工作台主页
-    ============================================================ -->
+    <!-- ===== 工作台主页 ===== -->
     <div id="mainPage" class="page">
         <div class="main-container">
-            <!-- 顶部栏 -->
             <div class="top-bar">
                 <a class="back-link" id="backBtn">← 返回启动页</a>
                 <div class="datetime-group">
@@ -1465,144 +1648,54 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 全局搜索框 -->
             <div class="search-container">
-                <input
-                type="text"
-                class="global-search-input"
-                id="globalSearchInput"
-                placeholder="🔍 搜索奶茶记录..."
-                autocomplete="off"
-                />
+                <input type="text" class="global-search-input" id="globalSearchInput" placeholder="🔍 搜索奶茶、电影、电视剧、贴纸..." autocomplete="off" />
             </div>
-
-            <!-- 卡片区 -->
             <div class="cards-row">
-                <!-- 日记（占位） -->
-                <div class="card">
-                    <div class="card-emoji">📔</div>
-                    <div class="card-text-group">
-                        <div class="card-title">日记</div>
-                        <div class="card-desc placeholder">尚未开始 🌱</div>
-                    </div>
-                </div>
-                <!-- 读书（占位） -->
-                <div class="card">
-                    <div class="card-emoji">📚</div>
-                    <div class="card-text-group">
-                        <div class="card-title">读书</div>
-                        <div class="card-desc placeholder">尚未开始 🌱</div>
-                    </div>
-                </div>
-                <!-- ★ 商情简报（数据卡片） -->
-                <div class="card" id="briefCard">
-                    <div class="card-emoji">📊</div>
-                    <div class="card-text-group">
-                        <div class="card-title">商情简报</div>
-                        <div class="card-desc" id="briefStatsDesc">加载中...</div>
-                    </div>
-                </div>
-                <!-- 奶茶记录（数据卡片） -->
-                <div class="card" id="drinkCard">
-                    <div class="card-emoji">🧋</div>
-                    <div class="card-text-group">
-                        <div class="card-title">奶茶记录</div>
-                        <div class="card-desc" id="drinkStatsDesc">加载中...</div>
-                    </div>
-                </div>
-
-                <!-- 今日心情（数据卡片） -->
-                <div class="card" id="moodCard">
-                    <div class="card-emoji">💭</div>
-                    <div class="card-text-group">
-                        <div class="card-title">今日心情</div>
-                        <div class="card-desc">
-                            <span class="desc-default" id="moodStatsDesc">加载中...</span>
-                            <span class="desc-hover">✨ 此刻心情如何，记录一下吧</span>
-                        </div>
-                        <div class="mood-preview-badge empty-preview" id="moodPreviewBadge">
-                            <span class="preview-emoji">🌸</span>
-                            <span class="preview-text" style="display:none;"></span>
-                        </div>
-                    </div>
-                </div>
+                <div class="card"><div class="card-emoji">📔</div><div class="card-text-group"><div class="card-title">日记</div><div class="card-desc placeholder">尚未开始 🌱</div></div></div>
+                <div class="card"><div class="card-emoji">📚</div><div class="card-text-group"><div class="card-title">读书</div><div class="card-desc placeholder">尚未开始 🌱</div></div></div>
+                <div class="card" id="briefCard"><div class="card-emoji">📊</div><div class="card-text-group"><div class="card-title">商情简报</div><div class="card-desc" id="briefStatsDesc">加载中...</div></div></div>
+                <div class="card" id="drinkCard"><div class="card-emoji">🧋</div><div class="card-text-group"><div class="card-title">奶茶记录</div><div class="card-desc" id="drinkStatsDesc">加载中...</div></div></div>
+                <div class="card" id="hobbyCard"><div class="card-emoji">🎨</div><div class="card-text-group"><div class="card-title">兴趣爱好</div><div class="card-desc" id="hobbyStatsDesc">电影 · 电视剧 · 贴纸</div></div></div>
+                <div class="card" id="moodCard"><div class="card-emoji">💭</div><div class="card-text-group"><div class="card-title">今日心情</div><div class="card-desc"><span class="desc-default" id="moodStatsDesc">加载中...</span><span class="desc-hover">✨ 此刻心情如何，记录一下吧</span></div><div class="mood-preview-badge empty-preview" id="moodPreviewBadge"><span class="preview-emoji">🌸</span><span class="preview-text" style="display:none;"></span></div></div></div>
             </div>
         </div>
     </div>
 
-    <!-- ============================================================
-    奶茶记录页 (IndexedDB)
-    ============================================================ -->
+    <!-- ===== 奶茶记录页 ===== -->
     <div id="drinkPage" class="page">
         <div class="drink-container">
-            <div class="drink-top-bar">
-                <a class="back-link drink-back" id="drinkBackBtn">← 返回工作台</a>
-                <span class="drink-title">🧋 奶茶记录</span>
-            </div>
-
+            <div class="drink-top-bar"><a class="back-link drink-back" id="drinkBackBtn">← 返回工作台</a><span class="drink-title">🧋 奶茶记录</span></div>
             <div class="search-result-bar" id="searchResultBar">
-                <span class="search-result-text">
-                    🔍 搜索结果：<span class="highlight" id="searchKeywordDisplay"></span>
-                    <span class="search-result-count" id="searchResultCount"></span>
-                </span>
+                <span class="search-result-text">🔍 搜索结果：<span class="highlight" id="searchKeywordDisplay"></span><span class="search-result-count" id="searchResultCount"></span></span>
                 <button class="btn-secondary" id="clearSearchBtn">✕ 清除搜索</button>
             </div>
-
             <div class="category-tabs" id="categoryTabs">
                 <button class="category-tab active" data-category="奶茶">奶茶</button>
                 <button class="category-tab" data-category="咖啡">咖啡</button>
                 <button class="category-tab" data-category="饮料">饮料</button>
                 <button class="category-tab" data-category="其他">其他</button>
             </div>
-
-            <div class="drink-list" id="drinkList">
-                <div class="drink-empty">🍃 还没有记录，写点什么吧</div>
-            </div>
-
+            <div class="drink-list" id="drinkList"><div class="drink-empty">🍃 还没有记录，写点什么吧</div></div>
             <div class="drink-form">
                 <div class="drink-form-title">📝 添加记录</div>
                 <div class="form-grid">
-                    <input type="text" class="input-field" id="drinkBrandInput" placeholder="品牌（如：喜茶）" maxlength="30" />
-                    <input type="text" class="input-field" id="drinkNameInput" placeholder="名称（如：芝芝莓莓）" maxlength="40" />
-                    <select class="input-field" id="drinkCategorySelect">
-                        <option value="奶茶">奶茶</option>
-                        <option value="咖啡">咖啡</option>
-                        <option value="饮料">饮料</option>
-                        <option value="其他">其他</option>
-                    </select>
+                    <input type="text" class="input-field" id="drinkBrandInput" placeholder="品牌" maxlength="30" />
+                    <input type="text" class="input-field" id="drinkNameInput" placeholder="名称" maxlength="40" />
+                    <select class="input-field" id="drinkCategorySelect"><option value="奶茶">奶茶</option><option value="咖啡">咖啡</option><option value="饮料">饮料</option><option value="其他">其他</option></select>
                     <input type="date" class="input-field" id="drinkDateInput" />
-                    <div class="full-width">
-                        <div class="star-rating" id="drinkStarRating">
-                            <span class="star" data-value="1">☆</span>
-                            <span class="star" data-value="2">☆</span>
-                            <span class="star" data-value="3">☆</span>
-                            <span class="star" data-value="4">☆</span>
-                            <span class="star" data-value="5">☆</span>
-                        </div>
-                    </div>
-                    <div class="full-width">
-                        <input type="text" class="input-field" id="drinkNoteInput" placeholder="备注（可选）" maxlength="80" />
-                    </div>
+                    <div class="full-width"><div class="star-rating" id="drinkStarRating"><span class="star" data-value="1">☆</span><span class="star" data-value="2">☆</span><span class="star" data-value="3">☆</span><span class="star" data-value="4">☆</span><span class="star" data-value="5">☆</span></div></div>
+                    <div class="full-width"><input type="text" class="input-field" id="drinkNoteInput" placeholder="备注（可选）" maxlength="80" /></div>
                 </div>
-                <div class="form-actions">
-                    <button class="btn-primary" id="drinkSaveBtn">保存</button>
-                    <button class="btn-secondary" id="drinkClearFormBtn">清空</button>
-                </div>
+                <div class="form-actions"><button class="btn-primary" id="drinkSaveBtn">保存</button><button class="btn-secondary" id="drinkClearFormBtn">清空</button></div>
             </div>
         </div>
     </div>
 
-    <!-- ============================================================
-    心情详情页
-    ============================================================ -->
+    <!-- ===== 心情页 ===== -->
     <div id="moodPage" class="page">
         <div class="mood-container">
-            <div class="mood-top-bar">
-                <a class="back-link mood-back" id="moodBackBtn">← 返回工作台</a>
-                <span class="mood-title">💭 今日心情</span>
-            </div>
-
+            <div class="mood-top-bar"><a class="back-link mood-back" id="moodBackBtn">← 返回工作台</a><span class="mood-title">💭 今日心情</span></div>
             <div class="mood-input-card">
                 <div class="mood-input-title">📝 记录今天的心情</div>
                 <input type="text" class="input-field" id="moodTextInput" placeholder="今天心情如何？" maxlength="200" autocomplete="off" />
@@ -1618,65 +1711,163 @@
                 </div>
                 <button class="btn-primary" id="moodSaveBtn">保存</button>
             </div>
-
-            <div class="mood-today-display">
-                <div class="mood-today-label">📌 今天的心情</div>
-                <div class="mood-today-content" id="moodTodayContent">
-                    <span class="empty-hint">还没有记录今天的心情 ✍️</span>
-                </div>
-            </div>
-
-            <div class="mood-history-section">
-                <div class="mood-history-title">📋 历史记录</div>
-                <div class="mood-history-list" id="moodHistoryList">
-                    <div class="mood-history-empty">暂无历史记录</div>
-                </div>
-            </div>
+            <div class="mood-today-display"><div class="mood-today-label">📌 今天的心情</div><div class="mood-today-content" id="moodTodayContent"><span class="empty-hint">还没有记录今天的心情 ✍️</span></div></div>
+            <div class="mood-history-section"><div class="mood-history-title">📋 历史记录</div><div class="mood-history-list" id="moodHistoryList"><div class="mood-history-empty">暂无历史记录</div></div></div>
         </div>
     </div>
 
-    <!-- ============================================================
-    ★ 商情简报页
-    ============================================================ -->
+    <!-- ===== 商情简报页 ===== -->
     <div id="briefPage" class="page">
         <div class="brief-container">
-            <!-- 顶部导航 -->
-            <div class="brief-top-bar">
-                <a class="back-link brief-back" id="briefBackBtn">← 返回工作台</a>
-                <span class="brief-title">📊 商情简报</span>
+            <div class="brief-top-bar"><a class="back-link brief-back" id="briefBackBtn">← 返回工作台</a><span class="brief-title">📊 商情简报</span></div>
+            <button class="brief-generate-btn" id="generateBriefBtn">🚀 生成今日简报</button>
+            <div class="brief-content-card" id="briefContent"><div class="empty-hint">✨ 暂无今日简报，点击上方按钮生成</div></div>
+        </div>
+    </div>
+
+    <!-- ===== 兴趣爱好页 ===== -->
+    <div id="hobbyPage" class="page">
+        <div class="hobby-container">
+            <div class="hobby-top-bar"><a class="back-link hobby-back" id="hobbyBackBtn">← 返回工作台</a><span class="hobby-title">🎨 兴趣爱好</span></div>
+            <div class="hobby-tabs" id="hobbyTabs">
+                <button class="hobby-tab active" data-tab="movie">🎬 电影</button>
+                <button class="hobby-tab" data-tab="tv">📺 电视剧</button>
+                <button class="hobby-tab" data-tab="sticker">✨ 造景贴纸</button>
             </div>
 
-            <!-- 生成按钮 -->
-            <button class="brief-generate-btn" id="generateBriefBtn">🚀 生成今日简报</button>
+            <!-- 电影 -->
+            <div class="hobby-section" id="hobbyMovieSection">
+                <div style="display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap;padding:0 0.2rem;">
+                    <span style="font-size:0.9rem;opacity:0.6;">筛选：</span>
+                    <select class="input-field filter-select" id="movieFilter">
+                        <option value="all">全部</option>
+                        <option value="want">想看</option>
+                        <option value="watching">正在看</option>
+                        <option value="done">已看完</option>
+                    </select>
+                </div>
+                <div class="hobby-list" id="hobbyMovieList"><div class="hobby-empty">🎬 还没有电影记录</div></div>
+                <div class="hobby-form" id="hobbyMovieForm">
+                    <div class="hobby-form-title">📝 添加电影记录</div>
+                    <div class="form-grid">
+                        <input type="date" class="input-field" id="movieDate" />
+                        <input type="text" class="input-field" id="movieTitle" placeholder="电影名" maxlength="60" />
+                        <input type="text" class="input-field" id="movieDuration" placeholder="时长（如：120分钟）" maxlength="20" />
+                        <input type="number" class="input-field" id="movieDouban" placeholder="豆瓣评分 (0-10)" step="0.1" min="0" max="10" />
+                        <select class="input-field" id="movieStatus">
+                            <option value="want">想看</option>
+                            <option value="watching" selected>正在看</option>
+                            <option value="done">已看完</option>
+                        </select>
+                        <div class="full-width" id="movieProgressWrap">
+                            <input type="text" class="input-field" id="movieProgress" placeholder="观看进度（如：1小时20分）" maxlength="40" />
+                        </div>
+                        <div class="full-width" id="movieRatingWrap" style="display:none;">
+                            <span style="font-size:0.85rem;color:#2d5a3d;opacity:0.6;">我的评分：</span>
+                            <div class="star-rating-small" id="movieMyRating">
+                                <span class="star" data-value="1">☆</span>
+                                <span class="star" data-value="2">☆</span>
+                                <span class="star" data-value="3">☆</span>
+                                <span class="star" data-value="4">☆</span>
+                                <span class="star" data-value="5">☆</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions"><button class="btn-primary" id="movieSaveBtn">保存</button><button class="btn-secondary" id="movieClearBtn">清空</button></div>
+                </div>
+            </div>
 
-            <!-- 简报内容 -->
-            <div class="brief-content-card" id="briefContent">
-                <div class="empty-hint">✨ 暂无今日简报，点击上方按钮生成</div>
+            <!-- 电视剧 -->
+            <div class="hobby-section hidden" id="hobbyTvSection">
+                <div style="display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap;padding:0 0.2rem;">
+                    <span style="font-size:0.9rem;opacity:0.6;">筛选：</span>
+                    <select class="input-field filter-select" id="tvFilter">
+                        <option value="all">全部</option>
+                        <option value="want">想看</option>
+                        <option value="watching">正在看</option>
+                        <option value="done">已看完</option>
+                    </select>
+                </div>
+                <div class="hobby-list" id="hobbyTvList"><div class="hobby-empty">📺 还没有电视剧记录</div></div>
+                <div class="hobby-form" id="hobbyTvForm">
+                    <div class="hobby-form-title">📝 添加电视剧记录</div>
+                    <div class="form-grid">
+                        <input type="text" class="input-field" id="tvTitle" placeholder="剧名" maxlength="60" />
+                        <input type="date" class="input-field" id="tvDate" />
+                        <select class="input-field" id="tvStatus">
+                            <option value="want">想看</option>
+                            <option value="watching">正在看</option>
+                            <option value="done">已看完</option>
+                        </select>
+                        <div class="full-width" id="tvProgressWrap">
+                            <input type="text" class="input-field" id="tvEpisode" placeholder="观看到第几集（如：3）" maxlength="10" />
+                            <input type="text" class="input-field" id="tvTime" placeholder="观看时间点（如：第3集 20分钟）" maxlength="40" />
+                        </div>
+                        <div class="full-width" id="tvRatingWrap" style="display:none;">
+                            <span style="font-size:0.85rem;color:#2d5a3d;opacity:0.6;">我的评分：</span>
+                            <div class="star-rating-small" id="tvMyRating">
+                                <span class="star" data-value="1">☆</span>
+                                <span class="star" data-value="2">☆</span>
+                                <span class="star" data-value="3">☆</span>
+                                <span class="star" data-value="4">☆</span>
+                                <span class="star" data-value="5">☆</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions"><button class="btn-primary" id="tvSaveBtn">保存</button><button class="btn-secondary" id="tvClearBtn">清空</button></div>
+                </div>
+            </div>
+
+            <!-- 贴纸 -->
+            <div class="hobby-section hidden" id="hobbyStickerSection">
+                <div class="hobby-list" id="hobbyStickerList"><div class="hobby-empty">✨ 还没有贴纸记录</div></div>
+                <div class="hobby-form" id="hobbyStickerForm">
+                    <div class="hobby-form-title">📝 添加贴纸记录</div>
+                    <div class="form-grid">
+                        <input type="text" class="input-field" id="stickerBrand" placeholder="品牌" maxlength="40" />
+                        <input type="text" class="input-field" id="stickerSeries" placeholder="系列号" maxlength="40" />
+                        <input type="text" class="input-field" id="stickerName" placeholder="贴纸名称（单张必填）" maxlength="40" />
+                        <select class="input-field" id="stickerType">
+                            <option value="single">单张</option>
+                            <option value="collection">合集本</option>
+                        </select>
+                        <input type="date" class="input-field" id="stickerDate" />
+                        <div class="full-width" id="stickerWhichWrap">
+                            <input type="text" class="input-field" id="stickerWhich" placeholder="完成了哪一张（如：第3张）" maxlength="40" />
+                        </div>
+                    </div>
+                    <div class="form-actions"><button class="btn-primary" id="stickerSaveBtn">保存</button><button class="btn-secondary" id="stickerClearBtn">清空</button></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ================================================================ -->
-    <!-- JavaScript -->
-    <!-- ================================================================ -->
+    <!-- ===== 搜索结果页 ===== -->
+    <div id="searchResultPage" class="page">
+        <div class="search-result-container">
+            <div class="search-result-header"><a class="back-link" id="searchResultBackBtn">← 返回工作台</a><span class="search-result-title">🔍 搜索结果</span></div>
+            <div class="search-result-summary" id="searchResultSummary">加载中...</div>
+            <div class="search-result-groups" id="searchResultGroups"></div>
+        </div>
+    </div>
+
     <script>
         (function() {
             "use strict";
 
-            // ================================================================
-            //  ★ API Key 配置区
-            // ================================================================
-            const API_KEY = "sk-363df1d99b27473e8f22c41315d8fe2e"; // 请替换为你的 DeepSeek API Key
+            // ===== API Key 配置区 =====
+            const API_KEY = "sk-363df1d99b27473e8f22c41315d8fe2e";
             const API_URL = "https://api.deepseek.com/v1/chat/completions";
 
-            // ================================================================
-            //  1. 页面切换
-            // ================================================================
+            // ===== 1. 页面切换 =====
             const startPage = document.getElementById('startPage');
             const mainPage = document.getElementById('mainPage');
             const drinkPage = document.getElementById('drinkPage');
             const moodPage = document.getElementById('moodPage');
             const briefPage = document.getElementById('briefPage');
+            const hobbyPage = document.getElementById('hobbyPage');
+            const searchResultPage = document.getElementById('searchResultPage');
+
             const helloBtn = document.getElementById('helloBtn');
             const backBtn = document.getElementById('backBtn');
             const drinkBackBtn = document.getElementById('drinkBackBtn');
@@ -1685,6 +1876,9 @@
             const moodBackBtn = document.getElementById('moodBackBtn');
             const briefCard = document.getElementById('briefCard');
             const briefBackBtn = document.getElementById('briefBackBtn');
+            const hobbyCard = document.getElementById('hobbyCard');
+            const hobbyBackBtn = document.getElementById('hobbyBackBtn');
+            const searchResultBackBtn = document.getElementById('searchResultBackBtn');
 
             const globalSearchInput = document.getElementById('globalSearchInput');
             const searchResultBar = document.getElementById('searchResultBar');
@@ -1707,16 +1901,16 @@
                         renderDrinkList(currentCategory);
                     }
                 }
-
                 if (pageId === 'moodPage') {
                     loadAndRenderMood();
                     setTimeout(() => document.getElementById('moodTextInput').focus(), 300);
                 }
-
                 if (pageId === 'briefPage') {
                     loadAndRenderBrief();
                 }
-
+                if (pageId === 'hobbyPage') {
+                    renderHobbyTab(currentHobbyTab);
+                }
                 if (pageId === 'mainPage') {
                     globalSearchInput.value = '';
                     window._searchKeyword = '';
@@ -1726,8 +1920,8 @@
                     updateMoodCardStats();
                     updateBriefCardStats();
                     updateMoodPreviewBadge();
+                    updateHobbyCardStats();
                 }
-
                 if (pageId === 'startPage') {
                     globalSearchInput.value = '';
                     window._searchKeyword = '';
@@ -1750,10 +1944,13 @@
             briefCard.addEventListener('click', () => { showPage('briefPage'); });
             briefBackBtn.addEventListener('click', (e) => { e.preventDefault();
                 showPage('mainPage'); });
+            hobbyCard.addEventListener('click', () => { showPage('hobbyPage'); });
+            hobbyBackBtn.addEventListener('click', (e) => { e.preventDefault();
+                showPage('mainPage'); });
+            searchResultBackBtn.addEventListener('click', (e) => { e.preventDefault();
+                showPage('mainPage'); });
 
-            // ================================================================
-            //  2. 时钟 & 天数
-            // ================================================================
+            // ===== 2. 时钟 & 天数 =====
             const dateDisplay = document.getElementById('dateDisplay');
             const timeDisplay = document.getElementById('timeDisplay');
             const greetingDisplay = document.getElementById('greetingDisplay');
@@ -1787,9 +1984,7 @@
             updateClockAndGreeting();
             setInterval(updateClockAndGreeting, 1000);
 
-            // ================================================================
-            //  3. 心情记录 (localStorage)
-            // ================================================================
+            // ===== 3. 心情记录 (localStorage) =====
             const MOOD_STORAGE_KEY = 'eyre_mood_records_v2';
             const moodTextInput = document.getElementById('moodTextInput');
             const moodSaveBtn = document.getElementById('moodSaveBtn');
@@ -1828,15 +2023,6 @@
                 localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(records));
             }
 
-            function getTodayMood(records) {
-                const today = getTodayStr();
-                return records.find(r => r.date === today) || null;
-            }
-
-            function getHistoryRecords(records) {
-                return records.slice().sort((a, b) => b.date.localeCompare(a.date));
-            }
-
             function saveMood(text, emoji) {
                 const trimmed = text.trim();
                 if (trimmed === '') return false;
@@ -1861,7 +2047,7 @@
                 } else {
                     moodTodayContent.innerHTML = '<span class="empty-hint">还没有记录今天的心情 ✍️</span>';
                 }
-                const history = getHistoryRecords(records);
+                const history = records.slice().sort((a, b) => b.date.localeCompare(a.date));
                 if (history.length === 0) {
                     moodHistoryList.innerHTML = '<div class="mood-history-empty">暂无历史记录</div>';
                 } else {
@@ -1878,9 +2064,7 @@
                     moodHistoryList.innerHTML = html;
                 }
                 updateMoodPreviewBadge();
-                if (mainPage.classList.contains('active')) {
-                    updateMoodCardStats();
-                }
+                if (mainPage.classList.contains('active')) updateMoodCardStats();
             }
 
             function updateMoodPreviewBadge() {
@@ -1895,8 +2079,7 @@
                     moodPreviewBadge.classList.remove('empty-preview');
                 } else {
                     moodPreviewBadge.innerHTML =
-                        '<span class="preview-emoji">🌸</span>' +
-                        '<span class="preview-text" style="display:none;"></span>';
+                        '<span class="preview-emoji">🌸</span><span class="preview-text" style="display:none;"></span>';
                     moodPreviewBadge.classList.add('empty-preview');
                 }
             }
@@ -1931,9 +2114,7 @@
                     moodTodayContent.style.opacity = '0.6';
                     setTimeout(() => { moodTodayContent.style.opacity = '1'; }, 150);
                     moodTextInput.focus();
-                    if (mainPage.classList.contains('active')) {
-                        updateMoodCardStats();
-                    }
+                    if (mainPage.classList.contains('active')) updateMoodCardStats();
                 } else {
                     alert('保存失败，请重试');
                 }
@@ -1941,26 +2122,7 @@
             moodTextInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault();
                     moodSaveBtn.click(); } });
 
-            (function migrateOldMood() {
-                const oldKey = 'eyre_workbench_mood';
-                try {
-                    const old = localStorage.getItem(oldKey);
-                    if (old && old.trim() !== '') {
-                        const records = loadAllMoodRecords();
-                        if (records.length === 0) {
-                            const today = getTodayStr();
-                            saveAllMoodRecords([{ date: today, text: old.trim(), emoji: '🌸' }]);
-                            localStorage.removeItem(oldKey);
-                            console.log('✅ 已迁移旧心情数据');
-                        }
-                    }
-                } catch (e) {}
-            })();
-
-            // ================================================================
-            //  4. 奶茶记录 — IndexedDB
-            // ================================================================
-
+            // ===== 4. 奶茶记录 (IndexedDB) =====
             const DB_NAME = 'EyreWorkbenchDB';
             const DB_VERSION = 1;
             const STORE_NAME = 'drinkRecords';
@@ -1981,9 +2143,7 @@
                 });
             }
 
-            function generateId() {
-                return Date.now() + Math.floor(Math.random() * 1000);
-            }
+            function generateId() { return Date.now() + Math.floor(Math.random() * 1000); }
 
             async function addDrinkRecord(record) {
                 const db = await openDB();
@@ -2043,10 +2203,7 @@
                     const parsed = JSON.parse(oldData);
                     if (!parsed || !Array.isArray(parsed.records) || parsed.records.length === 0) return false;
                     const existing = await getAllDrinkRecords();
-                    if (existing.length > 0) {
-                        localStorage.removeItem(OLD_KEY);
-                        return false;
-                    }
+                    if (existing.length > 0) { localStorage.removeItem(OLD_KEY); return false; }
                     const categoryMap = { '酒类': '其他' };
                     let migratedCount = 0;
                     for (const old of parsed.records) {
@@ -2059,21 +2216,13 @@
                             note: '',
                             date: old.date || getTodayStr()
                         };
-                        try {
-                            await addDrinkRecord(newRecord);
-                            migratedCount++;
-                        } catch (e) { console.warn('迁移单条记录失败:', e); }
+                        try { await addDrinkRecord(newRecord);
+                            migratedCount++; } catch (e) { console.warn('迁移单条记录失败:', e); }
                     }
-                    if (migratedCount > 0) {
-                        localStorage.removeItem(OLD_KEY);
-                        console.log('✅ 已从 localStorage 迁移 ' + migratedCount + ' 条奶茶记录到 IndexedDB');
-                        return true;
-                    }
+                    if (migratedCount > 0) { localStorage.removeItem(OLD_KEY);
+                        console.log('✅ 已从 localStorage 迁移 ' + migratedCount + ' 条奶茶记录到 IndexedDB'); return true; }
                     return false;
-                } catch (e) {
-                    console.warn('迁移奶茶数据失败:', e);
-                    return false;
-                }
+                } catch (e) { console.warn('迁移奶茶数据失败:', e); return false; }
             }
 
             let currentCategory = '奶茶';
@@ -2082,9 +2231,7 @@
             categoryTabs.addEventListener('click', function(e) {
                 const tab = e.target.closest('.category-tab');
                 if (!tab) return;
-                if (window._searchKeyword && window._searchKeyword.trim() !== '') {
-                    clearSearchState();
-                }
+                if (window._searchKeyword && window._searchKeyword.trim() !== '') clearSearchState();
                 categoryTabs.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
                 currentCategory = tab.dataset.category;
@@ -2097,29 +2244,21 @@
                 categoryTabs.classList.remove('hidden');
                 categoryTabs.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
                 const firstTab = categoryTabs.querySelector('.category-tab');
-                if (firstTab) {
-                    firstTab.classList.add('active');
-                    currentCategory = firstTab.dataset.category;
-                }
+                if (firstTab) { firstTab.classList.add('active');
+                    currentCategory = firstTab.dataset.category; }
                 globalSearchInput.value = '';
             }
 
-            clearSearchBtn.addEventListener('click', function() {
-                clearSearchState();
-                renderDrinkList(currentCategory);
-            });
+            clearSearchBtn.addEventListener('click', function() { clearSearchState();
+                renderDrinkList(currentCategory); });
 
             async function renderDrinkList(category) {
                 try {
                     const records = await getDrinkRecordsByCategory(category);
-                    records.sort((a, b) => {
-                        if (a.date !== b.date) return b.date.localeCompare(a.date);
-                        return (b.id || 0) - (a.id || 0);
-                    });
-                    if (records.length === 0) {
-                        drinkList.innerHTML = `<div class="drink-empty">🍃 还没有记录，写点什么吧</div>`;
-                        return;
-                    }
+                    records.sort((a, b) => { if (a.date !== b.date) return b.date.localeCompare(a.date); return (b.id ||
+                            0) - (a.id || 0); });
+                    if (records.length === 0) { drinkList.innerHTML =
+                            `<div class="drink-empty">🍃 还没有记录，写点什么吧</div>`; return; }
                     let html = '';
                     for (const r of records) {
                         const stars = '⭐'.repeat(Math.min(r.rating || 0, 5)) +
@@ -2157,15 +2296,9 @@
                                 await deleteDrinkRecord(id);
                                 if (window._searchKeyword && window._searchKeyword.trim() !== '') {
                                     await renderDrinkListWithSearch(window._searchKeyword.trim());
-                                } else {
-                                    await renderDrinkList(currentCategory);
-                                }
-                                if (mainPage.classList.contains('active')) {
-                                    updateDrinkCardStats();
-                                }
-                            } catch (err) {
-                                alert('删除失败：' + err.message);
-                            }
+                                } else { await renderDrinkList(currentCategory); }
+                                if (mainPage.classList.contains('active')) updateDrinkCardStats();
+                            } catch (err) { alert('删除失败：' + err.message); }
                         });
                     });
                 } catch (err) {
@@ -2175,9 +2308,7 @@
             }
 
             function fuseSearchDrinks(keyword, records) {
-                if (!keyword || keyword.trim() === '' || !records || records.length === 0) {
-                    return records || [];
-                }
+                if (!keyword || keyword.trim() === '' || !records || records.length === 0) return records || [];
                 const fuseOptions = {
                     keys: [
                         { name: 'brand', weight: 1.5 },
@@ -2202,31 +2333,21 @@
 
             async function renderDrinkListWithSearch(keyword) {
                 const trimmed = keyword.trim();
-                if (!trimmed) {
-                    searchResultBar.classList.remove('visible');
+                if (!trimmed) { searchResultBar.classList.remove('visible');
                     categoryTabs.classList.remove('hidden');
-                    renderDrinkList(currentCategory);
-                    return;
-                }
+                    renderDrinkList(currentCategory); return; }
                 try {
                     const allRecords = await getAllDrinkRecords();
                     const matched = fuseSearchDrinks(trimmed, allRecords);
-                    matched.sort((a, b) => {
-                        if (a.date !== b.date) return b.date.localeCompare(a.date);
-                        return (b.id || 0) - (a.id || 0);
-                    });
+                    matched.sort((a, b) => { if (a.date !== b.date) return b.date.localeCompare(a.date); return (b.id ||
+                            0) - (a.id || 0); });
                     searchResultBar.classList.add('visible');
                     searchKeywordDisplay.textContent = trimmed;
                     searchResultCount.textContent = `共 ${matched.length} 条`;
                     categoryTabs.classList.add('hidden');
-
                     if (matched.length === 0) {
-                        drinkList.innerHTML = `
-                            <div class="drink-empty">
-                                🔍 没有找到与 "<strong>${escapeHtml(trimmed)}</strong>" 相关的记录
-                                <br /><span style="font-size:0.8rem;opacity:0.5;">试试其他关键词吧</span>
-                            </div>
-                        `;
+                        drinkList.innerHTML =
+                            `<div class="drink-empty">🔍 没有找到与 "<strong>${escapeHtml(trimmed)}</strong>" 相关的记录<br /><span style="font-size:0.8rem;opacity:0.5;">试试其他关键词吧</span></div>`;
                         return;
                     }
                     let html = '';
@@ -2265,12 +2386,8 @@
                             try {
                                 await deleteDrinkRecord(id);
                                 await renderDrinkListWithSearch(window._searchKeyword.trim());
-                                if (mainPage.classList.contains('active')) {
-                                    updateDrinkCardStats();
-                                }
-                            } catch (err) {
-                                alert('删除失败：' + err.message);
-                            }
+                                if (mainPage.classList.contains('active')) updateDrinkCardStats();
+                            } catch (err) { alert('删除失败：' + err.message); }
                         });
                     });
                 } catch (err) {
@@ -2279,10 +2396,7 @@
                 }
             }
 
-            // ================================================================
-            //  5. 数据卡片统计
-            // ================================================================
-
+            // ===== 5. 数据卡片统计 =====
             async function updateDrinkCardStats() {
                 const descEl = document.getElementById('drinkStatsDesc');
                 if (!descEl) return;
@@ -2295,17 +2409,12 @@
                         const d = new Date(r.date);
                         return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
                     });
-                    if (monthRecords.length === 0) {
-                        descEl.textContent = '本月还没喝过，去记录一杯吧 🧋';
-                        return;
-                    }
+                    if (monthRecords.length === 0) { descEl.textContent = '本月还没喝过，去记录一杯吧 🧋'; return; }
                     const best = monthRecords.reduce((a, b) => (a.rating > b.rating ? a : b));
                     const favorite = `${best.brand || ''} ${best.name || ''}`.trim() || '未知';
                     descEl.textContent = `本月喝了 ${monthRecords.length} 杯，最爱：${favorite}`;
-                } catch (e) {
-                    console.warn('更新奶茶卡片统计失败:', e);
-                    descEl.textContent = '加载数据失败';
-                }
+                } catch (e) { console.warn('更新奶茶卡片统计失败:', e);
+                    descEl.textContent = '加载数据失败'; }
             }
 
             function updateMoodCardStats() {
@@ -2325,27 +2434,17 @@
                     const d = new Date(r.date);
                     return d >= monday && d <= sunday;
                 });
-                if (weekRecords.length === 0) {
-                    descEl.textContent = '本周还没记录心情';
-                    return;
-                }
+                if (weekRecords.length === 0) { descEl.textContent = '本周还没记录心情'; return; }
                 const freq = {};
-                weekRecords.forEach(r => {
-                    const emoji = r.emoji || '😐';
-                    freq[emoji] = (freq[emoji] || 0) + 1;
-                });
-                let maxEmoji = '😐';
-                let maxCount = 0;
-                for (const [emoji, count] of Object.entries(freq)) {
-                    if (count > maxCount) {
-                        maxCount = count;
-                        maxEmoji = emoji;
-                    }
-                }
+                weekRecords.forEach(r => { const emoji = r.emoji || '😐';
+                    freq[emoji] = (freq[emoji] || 0) + 1; });
+                let maxEmoji = '😐',
+                    maxCount = 0;
+                for (const [emoji, count] of Object.entries(freq)) { if (count > maxCount) { maxCount = count;
+                        maxEmoji = emoji; } }
                 descEl.textContent = `本周平均心情：${maxEmoji}`;
             }
 
-            // ★ 更新商情简报卡片
             function updateBriefCardStats() {
                 const descEl = document.getElementById('briefStatsDesc');
                 if (!descEl) return;
@@ -2353,62 +2452,45 @@
                 const key = 'eyre_daily_brief_' + today;
                 const stored = localStorage.getItem(key);
                 if (stored) {
-                    try {
-                        const data = JSON.parse(stored);
-                        if (data && data.content && data.content.trim() !== '') {
-                            descEl.textContent = '今日已生成 ✅';
-                            return;
-                        }
-                    } catch (e) {}
+                    try { const data = JSON.parse(stored); if (data && data.content && data.content.trim() !== '') { descEl
+                                .textContent = '今日已生成 ✅'; return; } } catch (e) {}
                 }
                 descEl.textContent = '今日未生成 · 点击查看';
             }
 
-            // ================================================================
-            //  ★ 商情简报逻辑区
-            // ================================================================
+            function updateHobbyCardStats() {
+                const descEl = document.getElementById('hobbyStatsDesc');
+                if (!descEl) return;
+                const movies = loadMovies();
+                const tvs = loadTvShows();
+                const stickers = loadStickers();
+                const total = movies.length + tvs.length + stickers.length;
+                descEl.textContent = `共 ${total} 条记录 · 点击查看`;
+            }
 
+            // ===== 商情简报 =====
             const briefContent = document.getElementById('briefContent');
             const generateBtn = document.getElementById('generateBriefBtn');
 
-            // 获取今天的日期字符串 (YYYY-MM-DD)
-            function getBriefDateStr() {
-                return getTodayStr();
-            }
+            function getBriefDateStr() { return getTodayStr(); }
 
-            // 获取今日简报存储 key
-            function getBriefStorageKey(dateStr) {
-                return 'eyre_daily_brief_' + dateStr;
-            }
+            function getBriefStorageKey(dateStr) { return 'eyre_daily_brief_' + dateStr; }
 
-            // 保存简报到 localStorage
             function saveBrief(content, dateStr) {
                 const key = getBriefStorageKey(dateStr);
-                const data = {
-                    date: dateStr,
-                    content: content,
-                    generatedAt: new Date().toISOString()
-                };
+                const data = { date: dateStr, content: content, generatedAt: new Date().toISOString() };
                 localStorage.setItem(key, JSON.stringify(data));
-                // 清理超过7天的简报
                 cleanOldBriefs();
             }
 
-            // 读取今日简报
             function loadTodayBrief() {
                 const today = getBriefDateStr();
                 const key = getBriefStorageKey(today);
                 const stored = localStorage.getItem(key);
                 if (!stored) return null;
-                try {
-                    const data = JSON.parse(stored);
-                    return data;
-                } catch (e) {
-                    return null;
-                }
+                try { return JSON.parse(stored); } catch (e) { return null; }
             }
 
-            // 清理超过7天的简报
             function cleanOldBriefs() {
                 const today = new Date();
                 const keys = Object.keys(localStorage);
@@ -2421,34 +2503,19 @@
                     const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
                     if (isNaN(d.getTime())) continue;
                     const diffDays = Math.floor((today - d) / (24 * 60 * 60 * 1000));
-                    if (diffDays > 7) {
-                        toDelete.push(key);
-                    }
+                    if (diffDays > 7) toDelete.push(key);
                 }
-                for (const key of toDelete) {
-                    localStorage.removeItem(key);
-                }
-                if (toDelete.length > 0) {
-                    console.log('🧹 清理了 ' + toDelete.length + ' 条过期简报');
-                }
+                for (const key of toDelete) localStorage.removeItem(key);
             }
 
-            // 渲染简报内容
             function renderBrief(content, dateStr) {
-                if (!content || content.trim() === '') {
-                    briefContent.innerHTML = `<div class="empty-hint">✨ 暂无今日简报，点击上方按钮生成</div>`;
-                    return;
-                }
-                // 保留纯文本格式，用 pre-wrap 展示
+                if (!content || content.trim() === '') { briefContent.innerHTML =
+                        `<div class="empty-hint">✨ 暂无今日简报，点击上方按钮生成</div>`; return; }
                 const escaped = escapeHtml(content);
                 const dateDisplay = formatDateDisplay(dateStr);
-                briefContent.innerHTML = `
-                    ${escaped}
-                    <div class="brief-meta">📅 ${dateDisplay} 生成</div>
-                `;
+                briefContent.innerHTML = `${escaped}<div class="brief-meta">📅 ${dateDisplay} 生成</div>`;
             }
 
-            // 显示加载状态
             function setBriefLoading(loading) {
                 if (loading) {
                     generateBtn.textContent = '⏳ 生成中...';
@@ -2460,27 +2527,17 @@
                 }
             }
 
-            // 显示错误
             function showBriefError(message) {
                 briefContent.innerHTML = `<div class="empty-hint error-hint">⚠️ ${escapeHtml(message)}</div>`;
             }
 
-            // 调用 DeepSeek API 生成简报
             async function generateBriefFromAI() {
-                const today = getBriefDateStr();
-                // 格式化日期显示
                 const d = new Date();
-                const year = d.getFullYear();
-                const month = d.getMonth() + 1;
-                const day = d.getDate();
-                const dateDisplay = year + '年' + month + '月' + day + '日';
-
+                const dateDisplay = d.getFullYear() + '年' + (d.getMonth() + 1) + '月' + d.getDate() + '日';
                 const systemPrompt =
                     `你是一个商情分析师，请生成今日简报，关注领域：新消费、AI应用（与办公生活学习结合）、商业动态、政治时事、宏观经济与财经、深圳教育资讯/热点的行业请报。每条新闻用一句话概括，分领域排列，总字数控制在800字以内。`;
-
                 const userPrompt =
                     `今天是 ${dateDisplay}，请基于近期公开信息生成简报。请严格按"🔸领域名\n- 一句话\n"纯文本输出，不要用表格、不要编号标题、不要解释。`;
-
                 const requestBody = {
                     model: "deepseek-chat",
                     messages: [
@@ -2491,39 +2548,25 @@
                     max_tokens: 1200,
                     stream: false
                 };
-
                 const response = await fetch(API_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + API_KEY
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API_KEY },
                     body: JSON.stringify(requestBody)
                 });
-
                 if (!response.ok) {
                     let errMsg = `API 请求失败 (HTTP ${response.status})`;
-                    try {
-                        const errData = await response.json();
-                        if (errData && errData.error && errData.error.message) {
-                            errMsg = errData.error.message;
-                        }
-                    } catch (e) {}
+                    try { const errData = await response.json(); if (errData && errData.error && errData.error.message)
+                            errMsg = errData.error.message; } catch (e) {}
                     throw new Error(errMsg);
                 }
-
                 const data = await response.json();
-                if (!data || !data.choices || !data.choices[0] || !data.choices[0].message) {
-                    throw new Error('API 返回数据格式异常');
-                }
+                if (!data || !data.choices || !data.choices[0] || !data.choices[0].message) throw new Error(
+                    'API 返回数据格式异常');
                 const content = data.choices[0].message.content;
-                if (!content || content.trim() === '') {
-                    throw new Error('AI 返回内容为空');
-                }
+                if (!content || content.trim() === '') throw new Error('AI 返回内容为空');
                 return content;
             }
 
-            // 加载并渲染简报（页面打开时调用）
             function loadAndRenderBrief() {
                 const today = getBriefDateStr();
                 const stored = loadTodayBrief();
@@ -2534,92 +2577,690 @@
                     briefContent.innerHTML = `<div class="empty-hint">✨ 暂无今日简报，点击上方按钮生成</div>`;
                     generateBtn.textContent = '🚀 生成今日简报';
                 }
-                // 更新首页卡片
-                if (mainPage.classList.contains('active')) {
-                    updateBriefCardStats();
-                }
+                if (mainPage.classList.contains('active')) updateBriefCardStats();
             }
 
-            // 生成按钮点击事件
             generateBtn.addEventListener('click', async function() {
-                // 如果正在加载，忽略
                 if (generateBtn.disabled) return;
-
-                // 检查 API Key
                 if (!API_KEY || API_KEY === '你的Key' || API_KEY.trim() === '') {
                     alert('⚠️ 请先在代码中配置 DeepSeek API Key (API_KEY 变量)');
                     return;
                 }
-
                 const today = getBriefDateStr();
-
-                // 检查今日是否已有简报，如果有，询问是否重新生成
                 const existing = loadTodayBrief();
                 if (existing && existing.content && existing.content.trim() !== '') {
-                    if (!confirm('今日简报已存在，是否重新生成？')) {
-                        return;
-                    }
+                    if (!confirm('今日简报已存在，是否重新生成？')) return;
                 }
-
                 setBriefLoading(true);
-
                 try {
                     const content = await generateBriefFromAI();
-                    // 保存
                     saveBrief(content, today);
-                    // 渲染
                     renderBrief(content, today);
                     generateBtn.textContent = '🔄 重新生成';
-                    // 更新首页卡片
-                    if (mainPage.classList.contains('active')) {
-                        updateBriefCardStats();
-                    }
-                    // 触发一次清理
+                    if (mainPage.classList.contains('active')) updateBriefCardStats();
                     cleanOldBriefs();
                 } catch (err) {
                     console.error('生成简报失败:', err);
                     showBriefError('生成失败：' + err.message);
-                    // 如果之前有简报，恢复显示
                     const stored = loadTodayBrief();
                     if (stored && stored.content && stored.content.trim() !== '') {
                         renderBrief(stored.content, today);
                         generateBtn.textContent = '🔄 重新生成';
-                    } else {
-                        generateBtn.textContent = '🚀 生成今日简报';
-                    }
-                } finally {
-                    setBriefLoading(false);
-                }
+                    } else { generateBtn.textContent = '🚀 生成今日简报'; }
+                } finally { setBriefLoading(false); }
             });
 
-            // ================================================================
-            //  6. 搜索框防抖与跳转
-            // ================================================================
+            // ===== 兴趣爱好模块 (localStorage) =====
+            const MOVIE_KEY = 'eyre_movies';
+            const TV_KEY = 'eyre_tvshows';
+            const STICKER_KEY = 'eyre_stickers';
 
-            let searchDebounceTimer = null;
-
-            globalSearchInput.addEventListener('input', function() {
-                const val = this.value.trim();
-                if (searchDebounceTimer) {
-                    clearTimeout(searchDebounceTimer);
-                    searchDebounceTimer = null;
-                }
-                if (val === '') {
-                    window._searchKeyword = '';
-                    if (drinkPage.classList.contains('active')) {
-                        clearSearchState();
-                        renderDrinkList(currentCategory);
+            // ----- 电影 (新数据结构: status: 'want'|'watching'|'done') -----
+            function loadMovies() {
+                try {
+                    const data = localStorage.getItem(MOVIE_KEY);
+                    if (!data) return [];
+                    const parsed = JSON.parse(data);
+                    // 迁移旧数据 (如果有 completed 字段)
+                    if (parsed.length > 0 && parsed[0].completed !== undefined) {
+                        const migrated = parsed.map(m => {
+                            const status = m.completed ? 'done' : (m.progressNote && m.progressNote.trim() ?
+                                'watching' : 'want');
+                            return {
+                                ...m,
+                                status: status,
+                                completed: undefined,
+                                completedDate: m.completed ? (m.completedDate || m.watchDate) : ''
+                            };
+                        });
+                        localStorage.setItem(MOVIE_KEY, JSON.stringify(migrated));
+                        return migrated;
                     }
+                    return parsed;
+                } catch (e) { return []; }
+            }
+
+            function saveMovies(movies) { localStorage.setItem(MOVIE_KEY, JSON.stringify(movies)); }
+
+            function addOrUpdateMovie(movie) {
+                let movies = loadMovies();
+                // 查找相同标题且状态不是 'done' 的记录
+                const existingIdx = movies.findIndex(m => m.title.trim() === movie.title.trim() && m.status !== 'done');
+                if (existingIdx !== -1 && movie.status === 'done') {
+                    // 合并：将现有记录更新为 done
+                    const existing = movies[existingIdx];
+                    existing.status = 'done';
+                    existing.completedDate = movie.completedDate || getTodayStr();
+                    existing.myRating = movie.myRating || existing.myRating;
+                    existing.doubanScore = movie.doubanScore || existing.doubanScore;
+                    existing.duration = movie.duration || existing.duration;
+                    existing.progressNote = '';
+                    // 保留 firstWatchDate
+                    if (!existing.firstWatchDate) existing.firstWatchDate = existing.watchDate || getTodayStr();
+                    movies[existingIdx] = existing;
+                    saveMovies(movies);
+                    return { action: 'updated', record: existing };
+                } else {
+                    // 新增记录
+                    movie.id = Date.now() + Math.random() * 1000;
+                    if (!movie.firstWatchDate) movie.firstWatchDate = movie.watchDate || getTodayStr();
+                    if (movie.status === 'done' && !movie.completedDate) movie.completedDate = getTodayStr();
+                    if (movie.status !== 'done') movie.completedDate = '';
+                    movies.push(movie);
+                    saveMovies(movies);
+                    return { action: 'added', record: movie };
+                }
+            }
+
+            function deleteMovie(id) {
+                let movies = loadMovies();
+                movies = movies.filter(m => m.id !== id);
+                saveMovies(movies);
+            }
+
+            // ----- 电视剧 -----
+            function loadTvShows() {
+                try { const data = localStorage.getItem(TV_KEY); return data ? JSON.parse(data) : []; } catch (
+                e) { return []; }
+            }
+
+            function saveTvShows(tvs) { localStorage.setItem(TV_KEY, JSON.stringify(tvs)); }
+
+            function addOrUpdateTvShow(tv) {
+                let tvs = loadTvShows();
+                const existingIdx = tvs.findIndex(t => t.title.trim() === tv.title.trim() && t.status !== 'done');
+                if (existingIdx !== -1 && tv.status === 'done') {
+                    const existing = tvs[existingIdx];
+                    existing.status = 'done';
+                    existing.completedDate = tv.completedDate || getTodayStr();
+                    existing.myRating = tv.myRating || existing.myRating;
+                    if (!existing.firstWatchDate) existing.firstWatchDate = existing.watchDate || getTodayStr();
+                    existing.episode = '';
+                    existing.timeNote = '';
+                    tvs[existingIdx] = existing;
+                    saveTvShows(tvs);
+                    return { action: 'updated', record: existing };
+                } else {
+                    tv.id = Date.now() + Math.random() * 1000;
+                    if (!tv.firstWatchDate) tv.firstWatchDate = tv.watchDate || getTodayStr();
+                    if (tv.status === 'done' && !tv.completedDate) tv.completedDate = getTodayStr();
+                    if (tv.status !== 'done') tv.completedDate = '';
+                    tvs.push(tv);
+                    saveTvShows(tvs);
+                    return { action: 'added', record: tv };
+                }
+            }
+
+            function deleteTvShow(id) {
+                let tvs = loadTvShows();
+                tvs = tvs.filter(t => t.id !== id);
+                saveTvShows(tvs);
+            }
+
+            // ----- 贴纸 -----
+            function loadStickers() {
+                try { const data = localStorage.getItem(STICKER_KEY); return data ? JSON.parse(data) : []; } catch (
+                e) { return []; }
+            }
+
+            function saveStickers(stickers) { localStorage.setItem(STICKER_KEY, JSON.stringify(stickers)); }
+
+            function addSticker(sticker) {
+                const stickers = loadStickers();
+                sticker.id = Date.now() + Math.random() * 1000;
+                stickers.push(sticker);
+                saveStickers(stickers);
+                return sticker;
+            }
+
+            function deleteSticker(id) {
+                let stickers = loadStickers();
+                stickers = stickers.filter(s => s.id !== id);
+                saveStickers(stickers);
+            }
+
+            // ----- 渲染兴趣爱好 -----
+            let currentHobbyTab = 'movie';
+            const hobbyTabs = document.getElementById('hobbyTabs');
+            const movieSection = document.getElementById('hobbyMovieSection');
+            const tvSection = document.getElementById('hobbyTvSection');
+            const stickerSection = document.getElementById('hobbyStickerSection');
+
+            hobbyTabs.addEventListener('click', function(e) {
+                const tab = e.target.closest('.hobby-tab');
+                if (!tab) return;
+                hobbyTabs.querySelectorAll('.hobby-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentHobbyTab = tab.dataset.tab;
+                renderHobbyTab(currentHobbyTab);
+            });
+
+            function renderHobbyTab(tab) {
+                movieSection.classList.toggle('hidden', tab !== 'movie');
+                tvSection.classList.toggle('hidden', tab !== 'tv');
+                stickerSection.classList.toggle('hidden', tab !== 'sticker');
+                if (tab === 'movie') renderMovieList();
+                else if (tab === 'tv') renderTvList();
+                else if (tab === 'sticker') renderStickerList();
+                if (mainPage.classList.contains('active')) updateHobbyCardStats();
+            }
+
+            // ---- 电影列表 + 筛选 ----
+            function renderMovieList() {
+                const container = document.getElementById('hobbyMovieList');
+                const filter = document.getElementById('movieFilter').value;
+                let movies = loadMovies();
+                if (filter !== 'all') movies = movies.filter(m => m.status === filter);
+                movies.sort((a, b) => (b.watchDate || '').localeCompare(a.watchDate || ''));
+
+                if (movies.length === 0) {
+                    container.innerHTML = `<div class="hobby-empty">🎬 没有匹配的电影记录</div>`;
                     return;
                 }
-                searchDebounceTimer = setTimeout(() => {
+                let html = '';
+                movies.forEach(m => {
+                    let statusText = '';
+                    if (m.status === 'want') statusText = '想看';
+                    else if (m.status === 'watching') statusText = '正在看 ' + (m.progressNote || '');
+                    else if (m.status === 'done') statusText = '✅ 已看完';
+                    const douban = m.doubanScore ? '豆瓣 ' + m.doubanScore : '';
+                    const myStars = '⭐'.repeat(Math.min(m.myRating || 0, 5)) +
+                        '☆'.repeat(Math.max(0, 5 - (m.myRating || 0)));
+                    const duration = m.duration ? '⏱ ' + m.duration : '';
+                    const firstDate = m.firstWatchDate ? '📅 ' + formatDateDisplay(m.firstWatchDate) : '';
+                    const completedDate = m.completedDate ? ' ✅ ' + formatDateDisplay(m.completedDate) : '';
+                    html += `
+                        <div class="hobby-item-card" data-id="${m.id}">
+                            <div class="hobby-item-row">
+                                <span class="hobby-item-title">${escapeHtml(m.title || '未命名')}</span>
+                                <span class="hobby-item-meta">${firstDate}</span>
+                            </div>
+                            <div class="hobby-item-row">
+                                <span class="hobby-item-meta">${escapeHtml(douban)}</span>
+                                <span class="hobby-item-meta">${myStars}</span>
+                                <span class="hobby-item-meta">${escapeHtml(duration)}</span>
+                                <span class="hobby-item-meta">${escapeHtml(statusText)}${completedDate}</span>
+                                <button class="hobby-item-delete" data-id="${m.id}">🗑 删除</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+                container.querySelectorAll('.hobby-item-delete').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const id = Number(this.dataset.id);
+                        if (!id) return;
+                        if (confirm('确定删除此电影记录？')) {
+                            deleteMovie(id);
+                            renderMovieList();
+                            updateHobbyCardStats();
+                        }
+                    });
+                });
+            }
+            document.getElementById('movieFilter').addEventListener('change', renderMovieList);
+
+            // ---- 电视剧列表 + 筛选 ----
+            function renderTvList() {
+                const container = document.getElementById('hobbyTvList');
+                const filter = document.getElementById('tvFilter').value;
+                let tvs = loadTvShows();
+                if (filter !== 'all') tvs = tvs.filter(t => t.status === filter);
+                tvs.sort((a, b) => (b.watchDate || '').localeCompare(a.watchDate || ''));
+
+                if (tvs.length === 0) {
+                    container.innerHTML = `<div class="hobby-empty">📺 没有匹配的电视剧记录</div>`;
+                    return;
+                }
+                let html = '';
+                tvs.forEach(t => {
+                    let statusText = '';
+                    if (t.status === 'want') statusText = '想看';
+                    else if (t.status === 'watching') statusText = '正在看 (第' + (t.episode || '?') + '集 ' + (t
+                        .timeNote || '') + ')';
+                    else if (t.status === 'done') statusText = '已看完 ✅';
+                    const firstDate = t.firstWatchDate ? '📅 ' + formatDateDisplay(t.firstWatchDate) : '';
+                    const completedDate = t.completedDate ? ' ✅ ' + formatDateDisplay(t.completedDate) : '';
+                    let ratingHtml = '';
+                    if (t.status === 'done' && t.myRating) {
+                        const r = '⭐'.repeat(Math.min(t.myRating, 5)) + '☆'.repeat(Math.max(0, 5 - t.myRating));
+                        ratingHtml = `<span class="hobby-item-meta">${r}</span>`;
+                    }
+                    html += `
+                        <div class="hobby-item-card" data-id="${t.id}">
+                            <div class="hobby-item-row">
+                                <span class="hobby-item-title">${escapeHtml(t.title || '未命名')}</span>
+                                <span class="hobby-item-meta">${firstDate}</span>
+                            </div>
+                            <div class="hobby-item-row">
+                                <span class="hobby-item-meta">${escapeHtml(statusText)}${completedDate}</span>
+                                ${ratingHtml}
+                                <button class="hobby-item-delete" data-id="${t.id}">🗑 删除</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+                container.querySelectorAll('.hobby-item-delete').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const id = Number(this.dataset.id);
+                        if (!id) return;
+                        if (confirm('确定删除此电视剧记录？')) {
+                            deleteTvShow(id);
+                            renderTvList();
+                            updateHobbyCardStats();
+                        }
+                    });
+                });
+            }
+            document.getElementById('tvFilter').addEventListener('change', renderTvList);
+
+            // ---- 贴纸列表 ----
+            function renderStickerList() {
+                const container = document.getElementById('hobbyStickerList');
+                const stickers = loadStickers().sort((a, b) => (b.completedDate || '').localeCompare(a.completedDate ||
+                ''));
+                if (stickers.length === 0) {
+                    container.innerHTML = `<div class="hobby-empty">✨ 还没有贴纸记录</div>`;
+                    return;
+                }
+                let html = '';
+                stickers.forEach(s => {
+                    let typeText = s.type === 'single' ? '单张' : '合集本';
+                    let extra = '';
+                    if (s.type === 'single') extra = ' ' + (s.name || '');
+                    else extra = ' 完成了 ' + (s.whichOne || '?');
+                    html += `
+                        <div class="hobby-item-card" data-id="${s.id}">
+                            <div class="hobby-item-row">
+                                <span class="hobby-item-title">${escapeHtml(s.brand || '')} ${escapeHtml(s.series || '')}</span>
+                                <span class="hobby-item-meta">${escapeHtml(typeText)}${escapeHtml(extra)}</span>
+                            </div>
+                            <div class="hobby-item-row">
+                                <span class="hobby-item-meta">📅 ${escapeHtml(s.completedDate || '')}</span>
+                                <button class="hobby-item-delete" data-id="${s.id}">🗑 删除</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+                container.querySelectorAll('.hobby-item-delete').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const id = Number(this.dataset.id);
+                        if (!id) return;
+                        if (confirm('确定删除此贴纸记录？')) {
+                            deleteSticker(id);
+                            renderStickerList();
+                            updateHobbyCardStats();
+                        }
+                    });
+                });
+            }
+
+            // ---- 电影表单 ----
+            const movieDate = document.getElementById('movieDate');
+            const movieTitle = document.getElementById('movieTitle');
+            const movieDuration = document.getElementById('movieDuration');
+            const movieDouban = document.getElementById('movieDouban');
+            const movieStatus = document.getElementById('movieStatus');
+            const movieProgress = document.getElementById('movieProgress');
+            const movieProgressWrap = document.getElementById('movieProgressWrap');
+            const movieRatingWrap = document.getElementById('movieRatingWrap');
+            let movieMyRatingVal = 0;
+            const movieMyRatingStars = document.getElementById('movieMyRating');
+            movieMyRatingStars.addEventListener('click', function(e) {
+                const star = e.target.closest('.star');
+                if (!star) return;
+                const val = parseInt(star.dataset.value, 10);
+                movieMyRatingVal = val;
+                movieMyRatingStars.querySelectorAll('.star').forEach(s => {
+                    s.classList.toggle('active', parseInt(s.dataset.value, 10) <= val);
+                });
+            });
+
+            movieStatus.addEventListener('change', function() {
+                const isWatching = this.value === 'watching';
+                const isDone = this.value === 'done';
+                movieProgressWrap.style.display = isWatching ? 'block' : 'none';
+                movieRatingWrap.style.display = isDone ? 'block' : 'none';
+            });
+            // 默认状态为 watching，显示进度
+            movieStatus.value = 'watching';
+            movieProgressWrap.style.display = 'block';
+            movieRatingWrap.style.display = 'none';
+
+            function clearMovieForm() {
+                movieDate.value = getTodayStr();
+                movieTitle.value = '';
+                movieDuration.value = '';
+                movieDouban.value = '';
+                movieStatus.value = 'watching';
+                movieProgress.value = '';
+                movieMyRatingVal = 0;
+                movieMyRatingStars.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+                movieProgressWrap.style.display = 'block';
+                movieRatingWrap.style.display = 'none';
+            }
+            document.getElementById('movieClearBtn').addEventListener('click', clearMovieForm);
+            movieDate.value = getTodayStr();
+
+            document.getElementById('movieSaveBtn').addEventListener('click', function() {
+                const title = movieTitle.value.trim();
+                if (!title) { alert('请输入电影名'); return; }
+                const watchDate = movieDate.value || getTodayStr();
+                const duration = movieDuration.value.trim();
+                const douban = parseFloat(movieDouban.value);
+                const status = movieStatus.value;
+                const progressNote = status === 'watching' ? movieProgress.value.trim() : '';
+                let myRating = 0;
+                if (status === 'done') {
+                    myRating = movieMyRatingVal;
+                    if (myRating === 0) { alert('请选择你的评分'); return; }
+                }
+                const movie = {
+                    watchDate,
+                    title,
+                    duration,
+                    doubanScore: isNaN(douban) ? null : douban,
+                    myRating,
+                    status,
+                    progressNote,
+                    firstWatchDate: watchDate,
+                    completedDate: status === 'done' ? getTodayStr() : ''
+                };
+                const result = addOrUpdateMovie(movie);
+                if (result.action === 'updated') {
+                    alert('✅ 已更新原记录为“已看完”');
+                } else {
+                    alert('✅ 电影记录已保存');
+                }
+                clearMovieForm();
+                renderMovieList();
+                updateHobbyCardStats();
+            });
+
+            // ---- 电视剧表单 ----
+            const tvTitle = document.getElementById('tvTitle');
+            const tvDate = document.getElementById('tvDate');
+            const tvStatus = document.getElementById('tvStatus');
+            const tvEpisode = document.getElementById('tvEpisode');
+            const tvTime = document.getElementById('tvTime');
+            const tvProgressWrap = document.getElementById('tvProgressWrap');
+            const tvRatingWrap = document.getElementById('tvRatingWrap');
+            let tvMyRatingVal = 0;
+            const tvMyRatingStars = document.getElementById('tvMyRating');
+            tvMyRatingStars.addEventListener('click', function(e) {
+                const star = e.target.closest('.star');
+                if (!star) return;
+                const val = parseInt(star.dataset.value, 10);
+                tvMyRatingVal = val;
+                tvMyRatingStars.querySelectorAll('.star').forEach(s => {
+                    s.classList.toggle('active', parseInt(s.dataset.value, 10) <= val);
+                });
+            });
+
+            tvStatus.addEventListener('change', function() {
+                const isWatching = this.value === 'watching';
+                const isDone = this.value === 'done';
+                tvProgressWrap.style.display = isWatching ? 'block' : 'none';
+                tvRatingWrap.style.display = isDone ? 'block' : 'none';
+            });
+            tvProgressWrap.style.display = 'none';
+            tvRatingWrap.style.display = 'none';
+
+            function clearTvForm() {
+                tvTitle.value = '';
+                tvDate.value = getTodayStr();
+                tvStatus.value = 'want';
+                tvEpisode.value = '';
+                tvTime.value = '';
+                tvMyRatingVal = 0;
+                tvMyRatingStars.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+                tvProgressWrap.style.display = 'none';
+                tvRatingWrap.style.display = 'none';
+            }
+            document.getElementById('tvClearBtn').addEventListener('click', clearTvForm);
+            tvDate.value = getTodayStr();
+
+            document.getElementById('tvSaveBtn').addEventListener('click', function() {
+                const title = tvTitle.value.trim();
+                if (!title) { alert('请输入剧名'); return; }
+                const watchDate = tvDate.value || getTodayStr();
+                const status = tvStatus.value;
+                let episode = '',
+                    timeNote = '';
+                if (status === 'watching') {
+                    episode = tvEpisode.value.trim();
+                    timeNote = tvTime.value.trim();
+                }
+                let myRating = 0;
+                if (status === 'done') {
+                    myRating = tvMyRatingVal;
+                    if (myRating === 0) { alert('请选择评分'); return; }
+                }
+                const tv = {
+                    title,
+                    watchDate,
+                    status,
+                    episode,
+                    timeNote,
+                    firstWatchDate: watchDate,
+                    completedDate: status === 'done' ? getTodayStr() : '',
+                    myRating: myRating
+                };
+                const result = addOrUpdateTvShow(tv);
+                if (result.action === 'updated') {
+                    alert('✅ 已更新原记录为“已看完”');
+                } else {
+                    alert('✅ 电视剧记录已保存');
+                }
+                clearTvForm();
+                renderTvList();
+                updateHobbyCardStats();
+            });
+
+            // ---- 贴纸表单 ----
+            const stickerBrand = document.getElementById('stickerBrand');
+            const stickerSeries = document.getElementById('stickerSeries');
+            const stickerName = document.getElementById('stickerName');
+            const stickerType = document.getElementById('stickerType');
+            const stickerDate = document.getElementById('stickerDate');
+            const stickerWhich = document.getElementById('stickerWhich');
+            const stickerWhichWrap = document.getElementById('stickerWhichWrap');
+
+            // 根据类型控制贴纸名称显示
+            function toggleStickerName() {
+                const isSingle = stickerType.value === 'single';
+                stickerName.style.display = isSingle ? 'block' : 'none';
+                stickerWhichWrap.style.display = isSingle ? 'none' : 'block';
+            }
+            stickerType.addEventListener('change', toggleStickerName);
+            toggleStickerName(); // 初始
+
+            function clearStickerForm() {
+                stickerBrand.value = '';
+                stickerSeries.value = '';
+                stickerName.value = '';
+                stickerType.value = 'single';
+                stickerDate.value = getTodayStr();
+                stickerWhich.value = '';
+                toggleStickerName();
+            }
+            document.getElementById('stickerClearBtn').addEventListener('click', clearStickerForm);
+            stickerDate.value = getTodayStr();
+
+            document.getElementById('stickerSaveBtn').addEventListener('click', function() {
+                const brand = stickerBrand.value.trim();
+                if (!brand) { alert('请输入品牌'); return; }
+                const series = stickerSeries.value.trim();
+                const name = stickerName.value.trim();
+                const type = stickerType.value;
+                if (type === 'single' && !name) { alert('单张贴纸请填写名称'); return; }
+                const completedDate = stickerDate.value || getTodayStr();
+                const whichOne = type === 'collection' ? stickerWhich.value.trim() : '';
+                const sticker = { brand, series, name, type, completedDate, whichOne };
+                addSticker(sticker);
+                clearStickerForm();
+                renderStickerList();
+                updateHobbyCardStats();
+                alert('✅ 贴纸记录已保存');
+            });
+
+            // ===== 全局搜索 (整合奶茶 + 兴趣爱好) =====
+            async function performGlobalSearch(keyword) {
+                const trimmed = keyword.trim();
+                if (!trimmed) return { drink: [], movies: [], tvs: [], stickers: [] };
+
+                let drinkResults = [];
+                try { const allDrinks = await getAllDrinkRecords();
+                    drinkResults = fuseSearchDrinks(trimmed, allDrinks); } catch (e) { console.warn('奶茶搜索失败', e); }
+
+                const allMovies = loadMovies();
+                const movieFuse = new Fuse(allMovies, { keys: ['title'], threshold: 0.35 });
+                const movieResults = movieFuse.search(trimmed).map(r => r.item);
+
+                const allTvs = loadTvShows();
+                const tvFuse = new Fuse(allTvs, { keys: ['title'], threshold: 0.35 });
+                const tvResults = tvFuse.search(trimmed).map(r => r.item);
+
+                const allStickers = loadStickers();
+                const stickerFuse = new Fuse(allStickers, { keys: ['brand', 'series', 'whichOne', 'name'],
+                    threshold: 0.35 });
+                const stickerResults = stickerFuse.search(trimmed).map(r => r.item);
+
+                return { drink: drinkResults, movies: movieResults, tvs: tvResults, stickers: stickerResults };
+            }
+
+            function renderSearchResults(results, keyword) {
+                const container = document.getElementById('searchResultGroups');
+                const summary = document.getElementById('searchResultSummary');
+                const total = results.drink.length + results.movies.length + results.tvs.length + results.stickers
+                    .length;
+                summary.textContent = `找到 ${total} 条匹配 "${escapeHtml(keyword)}" 的记录`;
+
+                if (total === 0) {
+                    container.innerHTML = `<div class="search-result-empty">🔍 没有找到相关记录</div>`;
+                    return;
+                }
+
+                let html = '';
+                if (results.drink.length > 0) {
+                    html += `<div class="search-result-group"><div class="search-result-group-title">🧋 奶茶 (${results.drink.length})</div>`;
+                    results.drink.forEach(r => {
+                        html += `
+                            <div class="search-result-item">
+                                <span class="s-title">${escapeHtml(r.brand || '')} ${escapeHtml(r.name || '')}</span>
+                                <span class="s-meta">${escapeHtml(r.category || '')} · ${escapeHtml(r.date || '')}</span>
+                                <button class="s-delete" data-type="drink" data-id="${r.id}">🗑</button>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+                if (results.movies.length > 0) {
+                    html += `<div class="search-result-group"><div class="search-result-group-title">🎬 电影 (${results.movies.length})</div>`;
+                    results.movies.forEach(r => {
+                        let statusText = r.status === 'want' ? '想看' : r.status === 'watching' ? '正在看' :
+                        '已看完';
+                        html += `
+                            <div class="search-result-item">
+                                <span class="s-title">${escapeHtml(r.title || '')}</span>
+                                <span class="s-meta">${escapeHtml(r.watchDate || '')} · ${statusText}</span>
+                                <button class="s-delete" data-type="movie" data-id="${r.id}">🗑</button>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+                if (results.tvs.length > 0) {
+                    html += `<div class="search-result-group"><div class="search-result-group-title">📺 电视剧 (${results.tvs.length})</div>`;
+                    results.tvs.forEach(r => {
+                        let statusText = r.status === 'want' ? '想看' : r.status === 'watching' ? '正在看' :
+                        '已看完';
+                        html += `
+                            <div class="search-result-item">
+                                <span class="s-title">${escapeHtml(r.title || '')}</span>
+                                <span class="s-meta">${escapeHtml(r.watchDate || '')} · ${statusText}</span>
+                                <button class="s-delete" data-type="tv" data-id="${r.id}">🗑</button>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+                if (results.stickers.length > 0) {
+                    html += `<div class="search-result-group"><div class="search-result-group-title">✨ 贴纸 (${results.stickers.length})</div>`;
+                    results.stickers.forEach(r => {
+                        let extra = r.type === 'collection' ? '  ' + (r.whichOne || '') : (r.name ? ' ' + r
+                            .name : '');
+                        html += `
+                            <div class="search-result-item">
+                                <span class="s-title">${escapeHtml(r.brand || '')} ${escapeHtml(r.series || '')}</span>
+                                <span class="s-meta">${escapeHtml(r.completedDate || '')}${extra}</span>
+                                <button class="s-delete" data-type="sticker" data-id="${r.id}">🗑</button>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+                container.innerHTML = html;
+
+                container.querySelectorAll('.s-delete').forEach(btn => {
+                    btn.addEventListener('click', async function(e) {
+                        e.stopPropagation();
+                        const type = this.dataset.type;
+                        const id = Number(this.dataset.id);
+                        if (!id) return;
+                        if (!confirm('确定删除此记录吗？')) return;
+                        if (type === 'drink') { try { await deleteDrinkRecord(id); } catch (err) { alert(
+                                '删除失败'); return; } } else if (type === 'movie') { deleteMovie(id); } else if (
+                            type === 'tv') { deleteTvShow(id); } else if (type === 'sticker') { deleteSticker(
+                            id); }
+                        const newResults = await performGlobalSearch(keyword);
+                        renderSearchResults(newResults, keyword);
+                        if (mainPage.classList.contains('active')) {
+                            updateDrinkCardStats();
+                            updateHobbyCardStats();
+                        }
+                    });
+                });
+            }
+
+            let globalSearchTimer = null;
+            globalSearchInput.addEventListener('input', function() {
+                const val = this.value.trim();
+                if (globalSearchTimer) clearTimeout(globalSearchTimer);
+                if (val === '') { if (searchResultPage.classList.contains('active')) showPage('mainPage'); return; }
+                globalSearchTimer = setTimeout(async () => {
                     const keyword = globalSearchInput.value.trim();
                     if (keyword === '') return;
-                    window._searchKeyword = keyword;
-                    showPage('drinkPage');
-                    renderDrinkListWithSearch(keyword);
-                    searchDebounceTimer = null;
-                }, 300);
+                    const results = await performGlobalSearch(keyword);
+                    showPage('searchResultPage');
+                    renderSearchResults(results, keyword);
+                    globalSearchTimer = null;
+                }, 350);
             });
 
             globalSearchInput.addEventListener('keydown', function(e) {
@@ -2627,20 +3268,16 @@
                     e.preventDefault();
                     const val = this.value.trim();
                     if (val === '') return;
-                    if (searchDebounceTimer) {
-                        clearTimeout(searchDebounceTimer);
-                        searchDebounceTimer = null;
-                    }
-                    window._searchKeyword = val;
-                    showPage('drinkPage');
-                    renderDrinkListWithSearch(val);
+                    if (globalSearchTimer) clearTimeout(globalSearchTimer);
+                    (async () => {
+                        const results = await performGlobalSearch(val);
+                        showPage('searchResultPage');
+                        renderSearchResults(results, val);
+                    })();
                 }
             });
 
-            // ================================================================
-            //  7. 表单（奶茶）
-            // ================================================================
-
+            // ===== 奶茶表单 =====
             const drinkBrandInput = document.getElementById('drinkBrandInput');
             const drinkNameInput = document.getElementById('drinkNameInput');
             const drinkCategorySelect = document.getElementById('drinkCategorySelect');
@@ -2662,10 +3299,8 @@
                 });
             });
 
-            function setDefaultDate() {
-                const today = getTodayStr();
-                drinkDateInput.value = today;
-            }
+            function setDefaultDate() { const today = getTodayStr();
+                drinkDateInput.value = today; }
             setDefaultDate();
 
             function clearDrinkForm() {
@@ -2692,31 +3327,17 @@
                     drinkNameInput.focus(); return; }
                 if (selectedDrinkRating === 0) { alert('请选择喜好程度 ⭐'); return; }
                 if (!date) { alert('请选择日期 📅'); return; }
-                const record = {
-                    id: generateId(),
-                    brand: brand,
-                    name: name,
-                    category: category,
-                    rating: selectedDrinkRating,
-                    note: note,
-                    date: date
-                };
+                const record = { id: generateId(), brand, name, category, rating: selectedDrinkRating, note, date };
                 try {
                     await addDrinkRecord(record);
                     if (window._searchKeyword && window._searchKeyword.trim() !== '') {
                         await renderDrinkListWithSearch(window._searchKeyword.trim());
-                    } else {
-                        await renderDrinkList(currentCategory);
-                    }
+                    } else { await renderDrinkList(currentCategory); }
                     clearDrinkForm();
                     drinkSaveBtn.textContent = '✅ 已保存';
                     setTimeout(() => { drinkSaveBtn.textContent = '保存'; }, 1200);
-                    if (mainPage.classList.contains('active')) {
-                        updateDrinkCardStats();
-                    }
-                } catch (err) {
-                    alert('保存失败：' + err.message);
-                }
+                    if (mainPage.classList.contains('active')) updateDrinkCardStats();
+                } catch (err) { alert('保存失败：' + err.message); }
             });
 
             drinkNameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault();
@@ -2724,17 +3345,12 @@
             drinkBrandInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault();
                     drinkNameInput.focus(); } });
 
-            // ================================================================
-            //  8. 初始化
-            // ================================================================
-
+            // ===== 初始化 =====
             async function initDrinkModule() {
                 try {
                     await migrateDrinkDataFromLocalStorage();
                     await renderDrinkList(currentCategory);
-                    if (mainPage.classList.contains('active')) {
-                        updateDrinkCardStats();
-                    }
+                    if (mainPage.classList.contains('active')) updateDrinkCardStats();
                     console.log('🧋 奶茶记录已初始化 (IndexedDB + Fuse.js)');
                 } catch (err) {
                     console.error('奶茶模块初始化失败:', err);
@@ -2742,19 +3358,14 @@
                 }
             }
 
-            // 加载心情并更新卡片
             loadAndRenderMood();
-            // 初始化奶茶模块
             initDrinkModule();
-
-            // ★ 初始化商情简报
             loadAndRenderBrief();
-            // 更新首页卡片
             if (mainPage.classList.contains('active')) {
                 updateBriefCardStats();
+                updateHobbyCardStats();
             }
 
-            // 监听可见性变化刷新数据
             document.addEventListener('visibilitychange', function() {
                 if (!document.hidden) {
                     updateClockAndGreeting();
@@ -2762,17 +3373,15 @@
                     if (drinkPage.classList.contains('active')) {
                         if (window._searchKeyword && window._searchKeyword.trim() !== '') {
                             renderDrinkListWithSearch(window._searchKeyword.trim());
-                        } else {
-                            renderDrinkList(currentCategory);
-                        }
+                        } else { renderDrinkList(currentCategory); }
                     }
-                    if (briefPage.classList.contains('active')) {
-                        loadAndRenderBrief();
-                    }
+                    if (briefPage.classList.contains('active')) loadAndRenderBrief();
+                    if (hobbyPage.classList.contains('active')) renderHobbyTab(currentHobbyTab);
                     if (mainPage.classList.contains('active')) {
                         updateDrinkCardStats();
                         updateMoodCardStats();
                         updateBriefCardStats();
+                        updateHobbyCardStats();
                         updateMoodPreviewBadge();
                     }
                 }
@@ -2783,35 +3392,23 @@
                     !mainPage.classList.contains('active') &&
                     !drinkPage.classList.contains('active') &&
                     !moodPage.classList.contains('active') &&
-                    !briefPage.classList.contains('active')) {
+                    !briefPage.classList.contains('active') &&
+                    !hobbyPage.classList.contains('active') &&
+                    !searchResultPage.classList.contains('active')) {
                     startPage.classList.add('active');
                 }
-                const firstTab = categoryTabs.querySelector('.category-tab');
-                if (firstTab) {
-                    categoryTabs.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                    firstTab.classList.add('active');
-                    currentCategory = firstTab.dataset.category;
-                }
-                if (drinkPage.classList.contains('active')) {
-                    if (window._searchKeyword && window._searchKeyword.trim() !== '') {
-                        renderDrinkListWithSearch(window._searchKeyword.trim());
-                    } else {
-                        renderDrinkList(currentCategory);
-                    }
-                }
-                if (moodPage.classList.contains('active')) loadAndRenderMood();
-                if (briefPage.classList.contains('active')) loadAndRenderBrief();
+                renderHobbyTab('movie');
+                cleanOldBriefs();
                 if (mainPage.classList.contains('active')) {
                     updateDrinkCardStats();
                     updateMoodCardStats();
                     updateBriefCardStats();
+                    updateHobbyCardStats();
                     updateMoodPreviewBadge();
                 }
-                // 清理过期简报
-                cleanOldBriefs();
             });
 
-            console.log('✨ Eyre 工作台已加载 (商情简报模块已集成) ✨');
+            console.log('✨ Eyre 工作台已加载 (电影状态+合并, 贴纸名称控制) ✨');
 
         })();
     </script>
